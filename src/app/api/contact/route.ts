@@ -1,5 +1,14 @@
 import { NextResponse } from 'next/server';
 
+// Define strict types to satisfy TypeScript/ESLint
+type Submission = {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  date: string;
+};
+
 export async function POST(request: Request) {
   try {
     const { name, email, message } = await request.json();
@@ -20,7 +29,7 @@ export async function POST(request: Request) {
     const apiUrl = `https://api.github.com/repos/${repo}/contents/data/submissions.json?ref=${branch}`;
 
     // 1. Fetch existing submissions from GitHub
-    let currentSubmissions: any[] = [];
+    let currentSubmissions: Submission[] = [];
     let currentSha: string | null = null;
 
     const getResponse = await fetch(apiUrl, {
@@ -34,13 +43,13 @@ export async function POST(request: Request) {
       const data = await getResponse.json();
       currentSha = data.sha;
       const content = Buffer.from(data.content, 'base64').toString('utf-8');
-      currentSubmissions = JSON.parse(content);
+      currentSubmissions = JSON.parse(content) as Submission[];
     } else if (getResponse.status !== 404) {
       throw new Error(`Failed to fetch submissions: ${getResponse.status}`);
     }
 
     // 2. Add the new submission
-    const newSubmission = {
+    const newSubmission: Submission = {
       id: Date.now(),
       name,
       email,
@@ -52,7 +61,7 @@ export async function POST(request: Request) {
     const newContent = Buffer.from(JSON.stringify(updatedSubmissions, null, 2)).toString('base64');
 
     // 3. Commit the updated file back to GitHub
-    const putBody: any = {
+    const putBody: { message: string; content: string; branch: string; sha?: string } = {
       message: `feat: new contact form submission from ${name}`,
       content: newContent,
       branch: branch
