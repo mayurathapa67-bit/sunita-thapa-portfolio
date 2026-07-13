@@ -1,64 +1,87 @@
-import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-
-type Submission = {
-  id: string;
-  name: string;
-  email: string;
-  message: string;
-  timestamp: string;
-};
-
-function getSubmissionsPath() {
-  return path.join(process.cwd(), "data", "submissions.json");
-}
-
-function readSubmissions(): Submission[] {
-  const filePath = getSubmissionsPath();
-  if (!fs.existsSync(filePath)) return [];
-  const raw = fs.readFileSync(filePath, "utf-8");
-  return JSON.parse(raw);
-}
-
-function writeSubmissions(submissions: Submission[]) {
-  fs.writeFileSync(
-    getSubmissionsPath(),
-    JSON.stringify(submissions, null, 2),
-    "utf-8"
-  );
-}
+import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
     const { name, email, message } = await request.json();
+
     if (!name || !email || !message) {
-      return NextResponse.json(
-        { error: "Name, email, and message are required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const submission: Submission = {
-      id: `sub_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    const token = process.env.GITHUB_TOKEN;
+    const repo = process.env.GITHUB_REPO;
+    const branch = process.env.GITHUB_BRANCH || 'main';
+
+    if (!token || !repo) {
+      console.error('❌ GitHub credentials missing for contact form.');
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    }
+
+    const apiUrl = `https://api.github.com/repos/${repo}/contents/data/submissions.json?ref=${branch}`;
+
+    // 1. Fetch existing submissions from GitHub
+    let currentSubmissions: any[] = [];
+    let currentSha: string | null = null;
+
+    const getResponse = await fetch(apiUrl, {
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+
+    if (getResponse.status === 200) {
+      const data = await getResponse.json();
+      currentSha = data.sha;
+      const content = Buffer.from(data.content, 'base64').toString('utf-8');
+      currentSubmissions = JSON.parse(content);
+    } else if (getResponse.status !== 404) {
+      throw new Error(`Failed to fetch submissions: ${getResponse.status}`);
+    }
+
+    // 2. Add the new submission
+    const newSubmission = {
+      id: Date.now(),
       name,
       email,
       message,
-      timestamp: new Date().toISOString(),
+      date: new Date().toISOString()
     };
 
-    const submissions = readSubmissions();
-    submissions.push(submission);
-    writeSubmissions(submissions);
+    const updatedSubmissions = [...currentSubmissions, newSubmission];
+    const newContent = Buffer.from(JSON.stringify(updatedSubmissions, null, 2)).toString('base64');
 
-    return NextResponse.json({
-      success: true,
-      message: "Message sent successfully!",
+    // 3. Commit the updated file back to GitHub
+    const putBody: any = {
+      message: `feat: new contact form submission from ${name}`,
+      content: newContent,
+      branch: branch
+    };
+
+    if (currentSha) {
+      putBody.sha = currentSha;
+    }
+
+    const putResponse = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(putBody)
     });
+
+    if (!putResponse.ok) {
+      const errorData = await putResponse.json();
+      console.error('GitHub PUT error:', errorData);
+      throw new Error('Failed to save submission to GitHub');
+    }
+
+    return NextResponse.json({ success: true, message: 'Submission saved!' });
+
   } catch (error) {
-    return NextResponse.json(
-      { error: (error as Error).message },
-      { status: 500 }
-    );
+    console.error('Contact API Error:', error);
+    return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
   }
 }
