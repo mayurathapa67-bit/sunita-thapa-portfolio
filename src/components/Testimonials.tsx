@@ -72,7 +72,7 @@ export default function Testimonials({
                     ))}
                   </div>
 
-                  <p className="text-base md:text-lg lg:text-xl text-[#1A1A1A]/75 leading-relaxed italic mb-8">
+                  <p className="text-base md:text-lg lg:text-xl text-[#1A1A1A]/90 leading-relaxed italic mb-8">
                     &ldquo;{testimonials[active].quote}&rdquo;
                   </p>
 
@@ -95,7 +95,7 @@ export default function Testimonials({
                       <p className="text-sm font-semibold text-[#1A1A1A]">
                         {testimonials[active].name}
                       </p>
-                      <p className="text-xs text-[#1A1A1A]/50">
+                      <p className="text-xs text-[#1A1A1A]/70">
                         {testimonials[active].role},{" "}
                         {testimonials[active].company}
                       </p>

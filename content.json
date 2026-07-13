@@ -2,12 +2,26 @@
   "nav": {
     "logo": "Sunita Thapa",
     "links": [
-      { "label": "Home", "href": "#home" },
-      { "label": "Work", "href": "#work" },
-      { "label": "Services", "href": "#services" },
-      { "label": "Process", "href": "#process" },
-      { "label": "About", "href": "#about" },
-      { "label": "Contact", "href": "#contact" }
+      {
+        "label": "Home",
+        "href": "/"
+      },
+      {
+        "label": "About",
+        "href": "/about"
+      },
+      {
+        "label": "Services",
+        "href": "/services"
+      },
+      {
+        "label": "Projects",
+        "href": "/projects"
+      },
+      {
+        "label": "Contact",
+        "href": "/contact"
+      }
     ]
   },
   "hero": {
@@ -23,22 +37,57 @@
     "headline": "Designing with purpose, empathy, and precision.",
     "bio": "I am a UI/UX designer passionate about crafting digital experiences that are not only visually stunning but deeply intuitive. With a background in user research and visual design, I help brands and startups translate complex problems into elegant, human-centered solutions. Every pixel I place is intentional — every interaction, considered.",
     "philosophy": "Great design is invisible. It anticipates needs, removes friction, and creates moments of delight. I believe in designing systems, not just screens — building cohesive experiences that scale beautifully across every touchpoint.",
-    "image": "",
+    "image": "https://res.cloudinary.com/tw19fpkk/image/upload/v1783931894/sunita-thapa-portfolio/px5y8loduvfhrenqyhtl.png",
     "stats": [
-      { "number": "5+", "label": "Years of Experience" },
-      { "number": "30+", "label": "Projects Delivered" },
-      { "number": "15+", "label": "Happy Clients" },
-      { "number": "98%", "label": "Client Satisfaction" }
+      {
+        "number": "5+",
+        "label": "Years of Experience"
+      },
+      {
+        "number": "30+",
+        "label": "Projects Delivered"
+      },
+      {
+        "number": "15+",
+        "label": "Happy Clients"
+      },
+      {
+        "number": "98%",
+        "label": "Client Satisfaction"
+      }
     ],
     "education": [
-      { "degree": "Master of Design (Interaction Design)", "school": "University of Technology Sydney", "year": "2018" },
-      { "degree": "Bachelor of Fine Arts (Visual Communication)", "school": "Kathmandu University", "year": "2015" }
+      {
+        "degree": "Master of Design (Interaction Design)",
+        "school": "University of Technology Sydney",
+        "year": "2018"
+      },
+      {
+        "degree": "Bachelor of Fine Arts (Visual Communication)",
+        "school": "Kathmandu University",
+        "year": "2015"
+      }
     ],
     "certifications": [
-      { "title": "Google UX Design Professional Certificate", "issuer": "Coursera", "year": "2020" },
-      { "title": "Certified Usability Analyst", "issuer": "Human Factors International", "year": "2019" }
+      {
+        "title": "Google UX Design Professional Certificate",
+        "issuer": "Coursera",
+        "year": "2020"
+      },
+      {
+        "title": "Certified Usability Analyst",
+        "issuer": "Human Factors International",
+        "year": "2019"
+      }
     ],
-    "interests": ["Product Photography", "Minimalist Art", "Travel & Culture", "Architecture", "Coffee Brewing", "Yoga & Mindfulness"],
+    "interests": [
+      "Product Photography",
+      "Minimalist Art",
+      "Travel & Culture",
+      "Architecture",
+      "Coffee Brewing",
+      "Yoga & Mindfulness"
+    ],
     "email": "sunitawriter.australia@gmail.com",
     "phone": "+61 489 079 815",
     "location": "Brisbane, Australia / Baneshwor, Nepal"
@@ -48,31 +97,77 @@
       {
         "title": "UI Design",
         "icon": "monitor",
-        "items": ["Visual Design", "Typography", "Color Theory", "Layout & Grid", "Design Systems", "Responsive Design"]
+        "items": [
+          "Visual Design",
+          "Typography",
+          "Color Theory",
+          "Layout & Grid",
+          "Design Systems",
+          "Responsive Design"
+        ]
       },
       {
         "title": "UX Research",
         "icon": "search",
-        "items": ["User Interviews", "Surveys & Analytics", "Competitive Analysis", "Persona Development", "Journey Mapping", "Usability Testing"]
+        "items": [
+          "User Interviews",
+          "Surveys & Analytics",
+          "Competitive Analysis",
+          "Persona Development",
+          "Journey Mapping",
+          "Usability Testing"
+        ]
       },
       {
         "title": "Prototyping",
         "icon": "layers",
-        "items": ["Wireframing", "Interactive Prototypes", "Motion Design", "Micro-interactions", "Rapid Iteration", "User Testing"]
+        "items": [
+          "Wireframing",
+          "Interactive Prototypes",
+          "Motion Design",
+          "Micro-interactions",
+          "Rapid Iteration",
+          "User Testing"
+        ]
       },
       {
         "title": "Design Systems",
         "icon": "grid",
-        "items": ["Component Libraries", "Design Tokens", "Documentation", "Accessibility", "Scalability", "Version Control"]
+        "items": [
+          "Component Libraries",
+          "Design Tokens",
+          "Documentation",
+          "Accessibility",
+          "Scalability",
+          "Version Control"
+        ]
       }
     ],
     "tools": [
-      { "name": "Figma", "level": 95 },
-      { "name": "Adobe XD", "level": 88 },
-      { "name": "Sketch", "level": 85 },
-      { "name": "InVision", "level": 80 },
-      { "name": "Framer", "level": 78 },
-      { "name": "Principle", "level": 75 }
+      {
+        "name": "Figma",
+        "level": 95
+      },
+      {
+        "name": "Adobe XD",
+        "level": 88
+      },
+      {
+        "name": "Sketch",
+        "level": 85
+      },
+      {
+        "name": "InVision",
+        "level": 80
+      },
+      {
+        "name": "Framer",
+        "level": 78
+      },
+      {
+        "name": "Principle",
+        "level": 75
+      }
     ]
   },
   "services": [
@@ -112,7 +207,11 @@
       "title": "Bloom Finance",
       "category": "Mobile",
       "description": "A personal finance app designed for Gen Z users. End-to-end UX research, wireframing, and a vibrant visual system making money management approachable and enjoyable.",
-      "tools": ["Figma", "After Effects", "Principle"],
+      "tools": [
+        "Figma",
+        "After Effects",
+        "Principle"
+      ],
       "image": "",
       "link": "#",
       "year": 2024,
@@ -122,7 +221,11 @@
       "title": "MediFlow",
       "category": "Dashboard",
       "description": "Comprehensive hospital management dashboard streamlining patient records, appointment scheduling, and analytics for healthcare professionals across clinics.",
-      "tools": ["Figma", "Adobe XD", "Miro"],
+      "tools": [
+        "Figma",
+        "Adobe XD",
+        "Miro"
+      ],
       "image": "",
       "link": "#",
       "year": 2024,
@@ -132,7 +235,11 @@
       "title": "Terra E-Commerce",
       "category": "Web",
       "description": "A sustainable goods marketplace with storytelling-driven design. Built a scalable design system and immersive browsing experience that elevated conversion by 34%.",
-      "tools": ["Figma", "Sketch", "Framer"],
+      "tools": [
+        "Figma",
+        "Sketch",
+        "Framer"
+      ],
       "image": "",
       "link": "#",
       "year": 2023,
@@ -142,7 +249,11 @@
       "title": "Voxel Social",
       "category": "Mobile",
       "description": "Creative networking platform connecting visual artists with collaborators. Designed UX flow from onboarding to content discovery with community-building features.",
-      "tools": ["Figma", "InVision", "Protopie"],
+      "tools": [
+        "Figma",
+        "InVision",
+        "Protopie"
+      ],
       "image": "",
       "link": "#",
       "year": 2023,
@@ -152,7 +263,11 @@
       "title": "Pulse Analytics",
       "category": "Dashboard",
       "description": "Real-time analytics dashboard for marketing teams. Simplified complex datasets into intuitive visualizations and actionable insights through thoughtful IA.",
-      "tools": ["Figma", "Adobe XD", "Tableau"],
+      "tools": [
+        "Figma",
+        "Adobe XD",
+        "Tableau"
+      ],
       "image": "",
       "link": "#",
       "year": 2024,
@@ -162,7 +277,11 @@
       "title": "Nomad Travel",
       "category": "Web",
       "description": "Travel planning platform focused on immersive storytelling. Responsive web experiences with rich media integration and personalized trip curation flows.",
-      "tools": ["Figma", "Sketch", "After Effects"],
+      "tools": [
+        "Figma",
+        "Sketch",
+        "After Effects"
+      ],
       "image": "",
       "link": "#",
       "year": 2023,
@@ -245,9 +364,21 @@
     "phone": "+61 489 079 815",
     "location": "Brisbane, Australia / Baneshwor, Nepal",
     "socials": [
-      { "platform": "LinkedIn", "url": "https://linkedin.com/in/sunita-thapa", "icon": "linkedin" },
-      { "platform": "Dribbble", "url": "https://dribbble.com/sunita-thapa", "icon": "dribbble" },
-      { "platform": "Behance", "url": "https://behance.net/sunita-thapa", "icon": "behance" }
+      {
+        "platform": "LinkedIn",
+        "url": "https://linkedin.com/in/sunita-thapa",
+        "icon": "linkedin"
+      },
+      {
+        "platform": "Dribbble",
+        "url": "https://dribbble.com/sunita-thapa",
+        "icon": "dribbble"
+      },
+      {
+        "platform": "Behance",
+        "url": "https://behance.net/sunita-thapa",
+        "icon": "behance"
+      }
     ],
     "cta": "Have a project in mind? Let's create something remarkable together."
   }

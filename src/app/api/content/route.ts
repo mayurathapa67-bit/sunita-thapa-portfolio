@@ -70,17 +70,26 @@ export async function PUT(request: Request) {
     const body = await request.json();
     const content = JSON.stringify(body, null, 2);
 
-    if (!GITHUB_TOKEN || !GITHUB_REPO) {
+    // Attempt local file write — safe to fail (e.g. read-only filesystem on Vercel)
+    try {
       const fs = await import("fs");
       const path = await import("path");
       const filePath = path.join(process.cwd(), "content.json");
       fs.writeFileSync(filePath, content, "utf-8");
-      return NextResponse.json({ success: true, message: "Saved locally" });
+    } catch (localWriteError) {
+      console.warn(
+        "Local save skipped (read-only filesystem):",
+        (localWriteError as Error).message
+      );
     }
 
-    const { sha } = await getGithubFile();
-    await commitToGithub(content, sha);
-    return NextResponse.json({ success: true, message: "Committed to GitHub" });
+    if (GITHUB_TOKEN && GITHUB_REPO) {
+      const { sha } = await getGithubFile();
+      await commitToGithub(content, sha);
+      return NextResponse.json({ success: true, message: "Saved to GitHub" });
+    }
+
+    return NextResponse.json({ success: true, message: "Saved locally" });
   } catch (error) {
     return NextResponse.json(
       { error: (error as Error).message },

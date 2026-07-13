@@ -73,7 +73,7 @@ export default function Process({ process }: { process: Phase[] }) {
                   <h3 className="text-xl lg:text-2xl font-serif text-[#1A1A1A] mt-2 mb-4">
                     {phase.title}
                   </h3>
-                  <p className="text-sm lg:text-base text-[#1A1A1A]/60 leading-relaxed max-w-3xl">
+                  <p className="text-sm lg:text-base text-[#1A1A1A]/80 leading-relaxed max-w-3xl">
                     {phase.description}
                   </p>
                 </div>

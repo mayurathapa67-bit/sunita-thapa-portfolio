@@ -42,7 +42,7 @@ export default function About({ about }: { about: AboutData }) {
                   <div className="w-24 h-24 rounded-full bg-[#8B5CF6]/20 flex items-center justify-center mx-auto mb-4">
                     <span className="text-4xl font-serif text-[#8B5CF6]/60">ST</span>
                   </div>
-                  <p className="text-sm text-[#1A1A1A]/30">Your photo here</p>
+                    <p className="text-sm text-[#1A1A1A]/60">Your photo here</p>
                 </div>
               </div>
             )}
@@ -76,7 +76,7 @@ export default function About({ about }: { about: AboutData }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="mt-8 text-base md:text-lg leading-[1.8] text-[#1A1A1A]/70"
+              className="mt-8 text-base md:text-lg leading-[1.8] text-[#1A1A1A]/85"
             >
               {about.bio}
             </motion.p>
@@ -85,7 +85,7 @@ export default function About({ about }: { about: AboutData }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-6 text-base md:text-lg leading-[1.8] text-[#1A1A1A]/50 italic border-l-4 border-[#8B5CF6]/30 pl-6"
+              className="mt-6 text-base md:text-lg leading-[1.8] text-[#1A1A1A]/70 italic border-l-4 border-[#8B5CF6]/30 pl-6"
             >
               {about.philosophy}
             </motion.p>
@@ -98,20 +98,20 @@ export default function About({ about }: { about: AboutData }) {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="mt-10 space-y-3"
             >
-              <a href={`mailto:${about.email}`} className="flex items-center gap-3 text-sm text-[#1A1A1A]/60 hover:text-[#8B5CF6] transition-colors group">
+              <a href={`mailto:${about.email}`} className="flex items-center gap-3 text-sm text-[#1A1A1A]/75 hover:text-[#8B5CF6] transition-colors group">
                 <span className="w-8 h-8 rounded-lg bg-[#8B5CF6]/10 flex items-center justify-center text-[#8B5CF6] group-hover:bg-[#8B5CF6] group-hover:text-white transition-all">
                   <Mail className="w-4 h-4" />
                 </span>
                 {about.email}
               </a>
-              <a href={`tel:${about.phone.replace(/\s/g, "")}`} className="flex items-center gap-3 text-sm text-[#1A1A1A]/60 hover:text-[#8B5CF6] transition-colors group">
+              <a href={`tel:${about.phone.replace(/\s/g, "")}`} className="flex items-center gap-3 text-sm text-[#1A1A1A]/75 hover:text-[#8B5CF6] transition-colors group">
                 <span className="w-8 h-8 rounded-lg bg-[#14B8A6]/10 flex items-center justify-center text-[#14B8A6] group-hover:bg-[#14B8A6] group-hover:text-white transition-all">
                   <Phone className="w-4 h-4" />
                 </span>
                 {about.phone}
               </a>
-              <div className="flex items-center gap-3 text-sm text-[#1A1A1A]/60">
-                <span className="w-8 h-8 rounded-lg bg-[#1A1A1A]/5 flex items-center justify-center text-[#1A1A1A]/40">
+              <div className="flex items-center gap-3 text-sm text-[#1A1A1A]/75">
+                  <span className="w-8 h-8 rounded-lg bg-[#1A1A1A]/5 flex items-center justify-center text-[#1A1A1A]/60">
                   <MapPin className="w-4 h-4" />
                 </span>
                 {about.location}
@@ -137,7 +137,7 @@ export default function About({ about }: { about: AboutData }) {
               <p className="text-4xl md:text-5xl font-serif text-[#8B5CF6] mb-2">
                 {stat.number}
               </p>
-              <p className="text-xs text-[#1A1A1A]/50 tracking-wide uppercase">
+              <p className="text-xs text-[#1A1A1A]/70 tracking-wide uppercase">
                 {stat.label}
               </p>
             </motion.div>
@@ -167,7 +167,7 @@ export default function About({ about }: { about: AboutData }) {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-[#1A1A1A]">{edu.degree}</p>
-                    <p className="text-xs text-[#1A1A1A]/50 mt-1">{edu.school} &middot; {edu.year}</p>
+                    <p className="text-xs text-[#1A1A1A]/70 mt-1">{edu.school} &middot; {edu.year}</p>
                   </div>
                 </div>
               ))}
@@ -198,7 +198,7 @@ export default function About({ about }: { about: AboutData }) {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-[#1A1A1A]">{cert.title}</p>
-                    <p className="text-xs text-[#1A1A1A]/50 mt-1">{cert.issuer} &middot; {cert.year}</p>
+                    <p className="text-xs text-[#1A1A1A]/70 mt-1">{cert.issuer} &middot; {cert.year}</p>
                   </div>
                 </div>
               ))}
@@ -215,14 +215,14 @@ export default function About({ about }: { about: AboutData }) {
             transition={{ duration: 0.6, delay: 0.45 }}
             className="mt-12 pt-12 border-t border-[#1A1A1A]/10"
           >
-            <p className="text-xs tracking-[0.25em] uppercase text-[#1A1A1A]/40 mb-6">
+            <p className="text-xs tracking-[0.25em] uppercase text-[#1A1A1A]/60 mb-6">
               Personal Interests
             </p>
             <div className="flex flex-wrap gap-3">
               {about.interests.map((interest) => (
                 <span
                   key={interest}
-                  className="px-4 py-2 bg-white rounded-full text-xs text-[#1A1A1A]/60 border border-gray-100 shadow-sm"
+                  className="px-4 py-2 bg-white rounded-full text-xs text-[#1A1A1A]/75 border border-gray-100 shadow-sm"
                 >
                   {interest}
                 </span>

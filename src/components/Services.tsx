@@ -60,7 +60,7 @@ export default function Services({ services }: { services: Service[] }) {
                 <h3 className="text-xl font-serif text-[#1A1A1A] mb-3">
                   {service.title}
                 </h3>
-                <p className="text-sm text-[#1A1A1A]/60 leading-relaxed">
+                <p className="text-sm text-[#1A1A1A]/80 leading-relaxed">
                   {service.description}
                 </p>
               </motion.div>

@@ -1,48 +1,35 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-type AuthContextType = {
+interface AuthContextType {
   isAuthenticated: boolean;
-  login: (password: string) => Promise<boolean>;
+  login: () => void;
   logout: () => void;
-};
+}
 
-const AuthContext = createContext<AuthContextType>({
-  isAuthenticated: false,
-  login: async () => false,
-  logout: () => {},
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    setIsAuthenticated(sessionStorage.getItem("admin_auth") === "true");
-  }, []);
-
-  const login = useCallback(async (password: string) => {
-    try {
-      const res = await fetch("/api/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
-      });
-      if (res.ok) {
-        sessionStorage.setItem("admin_auth", "true");
-        setIsAuthenticated(true);
-        return true;
-      }
-      return false;
-    } catch {
-      return false;
+    // Check if user is already logged in from previous session
+    const authStatus = sessionStorage.getItem("isAuthenticated");
+    if (authStatus === "true") {
+      setIsAuthenticated(true);
     }
   }, []);
 
-  const logout = useCallback(() => {
-    sessionStorage.removeItem("admin_auth");
+  const login = () => {
+    sessionStorage.setItem("isAuthenticated", "true");
+    setIsAuthenticated(true);
+  };
+
+  const logout = () => {
+    sessionStorage.removeItem("isAuthenticated");
     setIsAuthenticated(false);
-  }, []);
+  };
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
@@ -52,5 +39,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 }
 
 export function useAuth() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 }

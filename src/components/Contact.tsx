@@ -83,7 +83,7 @@ export default function Contact({ contact }: { contact: ContactData }) {
                 <Mail className="w-5 h-5" />
               </span>
               <div>
-                <p className="text-xs text-[#1A1A1A]/40 uppercase tracking-wider">
+                <p className="text-xs text-[#1A1A1A]/60 uppercase tracking-wider">
                   Email
                 </p>
                 <a
@@ -99,7 +99,7 @@ export default function Contact({ contact }: { contact: ContactData }) {
                 <Phone className="w-5 h-5" />
               </span>
               <div>
-                <p className="text-xs text-[#1A1A1A]/40 uppercase tracking-wider">
+                <p className="text-xs text-[#1A1A1A]/60 uppercase tracking-wider">
                   Phone
                 </p>
                 <a
@@ -111,11 +111,11 @@ export default function Contact({ contact }: { contact: ContactData }) {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <span className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400">
+              <span className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-gray-600">
                 <MapPin className="w-5 h-5" />
               </span>
               <div>
-                <p className="text-xs text-[#1A1A1A]/40 uppercase tracking-wider">
+                <p className="text-xs text-[#1A1A1A]/60 uppercase tracking-wider">
                   Location
                 </p>
                 <p className="text-sm md:text-base text-[#1A1A1A]">
@@ -130,7 +130,7 @@ export default function Contact({ contact }: { contact: ContactData }) {
                 <a
                   key={s.platform}
                   href={s.url}
-                  className={`px-5 py-2.5 rounded-full border border-gray-200 text-sm text-[#1A1A1A]/60 transition-all ${socialColors[s.platform] || "hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A]"}`}
+                  className={`px-5 py-2.5 rounded-full border border-gray-200 text-sm text-[#1A1A1A]/80 transition-all ${socialColors[s.platform] || "hover:bg-[#1A1A1A] hover:text-white hover:border-[#1A1A1A]"}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -158,7 +158,7 @@ export default function Contact({ contact }: { contact: ContactData }) {
                 <p className="text-lg font-serif text-[#1A1A1A] mb-2">
                   Message sent!
                 </p>
-                <p className="text-sm text-[#1A1A1A]/50">
+                <p className="text-sm text-[#1A1A1A]/70">
                   Thank you for reaching out. I&apos;ll get back to you soon.
                 </p>
                 <button
@@ -174,7 +174,7 @@ export default function Contact({ contact }: { contact: ContactData }) {
                   <div>
                     <label
                       htmlFor="contact-name"
-                      className="block text-xs font-medium text-[#1A1A1A]/50 uppercase tracking-wider mb-2"
+                      className="block text-xs font-medium text-[#1A1A1A]/70 uppercase tracking-wider mb-2"
                     >
                       Name
                     </label>
@@ -187,13 +187,13 @@ export default function Contact({ contact }: { contact: ContactData }) {
                         setForm({ ...form, name: e.target.value })
                       }
                       placeholder="Your name"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/30 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/30 focus:border-[#8B5CF6] transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/50 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/30 focus:border-[#8B5CF6] transition-all"
                     />
                   </div>
                   <div>
                     <label
                       htmlFor="contact-email"
-                      className="block text-xs font-medium text-[#1A1A1A]/50 uppercase tracking-wider mb-2"
+                      className="block text-xs font-medium text-[#1A1A1A]/70 uppercase tracking-wider mb-2"
                     >
                       Email
                     </label>
@@ -206,16 +206,16 @@ export default function Contact({ contact }: { contact: ContactData }) {
                         setForm({ ...form, email: e.target.value })
                       }
                       placeholder="your@email.com"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/30 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/30 focus:border-[#8B5CF6] transition-all"
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/50 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/30 focus:border-[#8B5CF6] transition-all"
                     />
                   </div>
                 </div>
                 <div>
                   <label
                     htmlFor="contact-message"
-                    className="block text-xs font-medium text-[#1A1A1A]/50 uppercase tracking-wider mb-2"
-                  >
-                    Message
+                      className="block text-xs font-medium text-[#1A1A1A]/70 uppercase tracking-wider mb-2"
+                    >
+                      Message
                   </label>
                   <textarea
                     id="contact-message"
@@ -226,7 +226,7 @@ export default function Contact({ contact }: { contact: ContactData }) {
                       setForm({ ...form, message: e.target.value })
                     }
                     placeholder="Tell me about your project..."
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/30 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/30 focus:border-[#8B5CF6] transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-[#1A1A1A] placeholder:text-[#1A1A1A]/50 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/30 focus:border-[#8B5CF6] transition-all resize-none"
                   />
                 </div>
                 <button

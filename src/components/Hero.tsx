@@ -141,7 +141,7 @@ export default function Hero({ hero }: { hero: HeroData }) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-6 md:mt-8 text-base md:text-lg lg:text-xl text-[#1A1A1A]/50 max-w-xl leading-relaxed"
+            className="mt-6 md:mt-8 text-base md:text-lg lg:text-xl text-[#1A1A1A]/80 max-w-xl leading-relaxed"
           >
             {hero.subtitle}
           </motion.p>
@@ -155,7 +155,7 @@ export default function Hero({ hero }: { hero: HeroData }) {
           >
             <MagneticButton>
               <a
-                href="#work"
+                href="/projects"
                 className="group relative inline-flex items-center gap-2 px-8 py-4 bg-[#1A1A1A] text-white rounded-full text-sm font-medium tracking-wide overflow-hidden transition-all"
               >
                 <span className="absolute inset-0 bg-[#8B5CF6] scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
@@ -167,8 +167,8 @@ export default function Hero({ hero }: { hero: HeroData }) {
             </MagneticButton>
             <MagneticButton>
               <a
-                href="#contact"
-                className="group inline-flex items-center gap-2 px-8 py-4 border border-[#1A1A1A]/15 text-[#1A1A1A]/60 rounded-full text-sm font-medium tracking-wide hover:bg-[#1A1A1A]/5 hover:border-[#1A1A1A]/30 transition-all"
+                href="/contact"
+                className="group inline-flex items-center gap-2 px-8 py-4 border border-[#1A1A1A]/15 text-[#1A1A1A]/80 rounded-full text-sm font-medium tracking-wide hover:bg-[#1A1A1A]/5 hover:border-[#1A1A1A]/30 transition-all"
               >
                 {hero.cta_secondary}
               </a>
@@ -180,7 +180,7 @@ export default function Hero({ hero }: { hero: HeroData }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 1 }}
-            className="mt-8 text-xs text-[#1A1A1A]/30 tracking-[0.15em] uppercase"
+            className="mt-8 text-xs text-[#1A1A1A]/60 tracking-[0.15em] uppercase"
           >
             Based in {hero.location}
           </motion.p>

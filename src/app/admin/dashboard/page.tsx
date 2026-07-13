@@ -17,11 +17,11 @@ type TabId = (typeof TABS)[number]["id"];
 
 function SectionCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_0_rgba(0,0,0,0.06)] transition-shadow">
-      <div className="px-7 py-5 border-b border-gray-50">
-        <h3 className="text-sm font-semibold text-gray-800">{title}</h3>
+    <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm">
+      <div className="px-6 py-4 border-b border-gray-100">
+        <h3 className="text-base font-bold text-gray-800">{title}</h3>
       </div>
-      <div className="px-7 py-6 space-y-5">{children}</div>
+      <div className="px-6 py-6 space-y-5">{children}</div>
     </div>
   );
 }
@@ -42,7 +42,7 @@ function EditableField({
     <div>
       <label
         htmlFor={id}
-        className="block text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1.5"
+        className="block text-sm font-medium text-gray-600 mb-1.5"
       >
         {label}
       </label>
@@ -52,7 +52,7 @@ function EditableField({
           rows={4}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-gray-700 placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20 focus:border-[#8B5CF6]/40 transition-all resize-none"
+          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20 focus:border-[#8B5CF6]/40 transition-all resize-none"
         />
       ) : (
         <input
@@ -60,7 +60,7 @@ function EditableField({
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-sm text-gray-700 placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20 focus:border-[#8B5CF6]/40 transition-all"
+          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20 focus:border-[#8B5CF6]/40 transition-all"
         />
       )}
     </div>
@@ -108,19 +108,19 @@ function ArrayEditor({
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {safeItems.length === 0 ? (
-        <p className="text-sm text-gray-300 italic py-2">No items yet.</p>
+        <p className="text-sm text-gray-400 italic py-2">No items yet.</p>
       ) : (
         safeItems.map((item, i) => (
-          <div key={i} className="bg-gray-50/50 rounded-xl p-5 border border-gray-100 relative">
+          <div key={i} className="bg-gray-50/60 rounded-xl p-5 border border-gray-100 relative">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-gray-700 uppercase tracking-wider">
                 {item?.[titleKey] ? String(item[titleKey]) : `Item ${i + 1}`}
               </span>
               <button
                 onClick={() => removeItem(i)}
-                className="text-[11px] text-red-300 hover:text-red-500 transition-colors font-medium"
+                className="text-xs text-red-400 hover:text-red-600 transition-colors font-medium"
               >
                 Remove
               </button>
@@ -148,7 +148,7 @@ function ArrayEditor({
       )}
       <button
         onClick={addItem}
-        className="w-full py-3 border-2 border-dashed border-gray-100 rounded-xl text-xs text-gray-300 hover:text-[#8B5CF6]/60 hover:border-[#8B5CF6]/20 transition-all font-medium"
+        className="w-full py-3 border-2 border-dashed border-gray-200 rounded-xl text-xs font-medium text-gray-500 hover:text-[#8B5CF6] hover:border-[#8B5CF6]/30 transition-all"
       >
         + Add Item
       </button>
@@ -200,7 +200,7 @@ export default function AdminDashboard() {
       <div className="min-h-screen bg-[#F9F9F7] flex items-center justify-center">
         <div className="flex items-center gap-3">
           <div className="w-5 h-5 border-2 border-[#8B5CF6] border-t-transparent rounded-full animate-spin" />
-          <span className="text-sm text-gray-400">Loading...</span>
+          <span className="text-sm text-gray-500">Loading...</span>
         </div>
       </div>
     );
@@ -237,15 +237,8 @@ export default function AdminDashboard() {
   const processData = (content?.process as SubItem[]) || [];
   const testimonials = (content?.testimonials as SubItem[]) || [];
 
-  const PageSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div className="mb-10">
-      <h3 className="text-sm font-semibold text-gray-700 mb-5">{title}</h3>
-      <div className="space-y-5">{children}</div>
-    </div>
-  );
-
-  const renderContent = () => (
-    <div>
+  const contentSections = (
+    <div className="space-y-12">
       <SectionCard title="Navigation">
         <EditableField label="Logo Text" value={safeStr(nav?.logo)} onChange={(v) => upd("nav", "logo", v)} />
       </SectionCard>
@@ -265,8 +258,10 @@ export default function AdminDashboard() {
       </SectionCard>
 
       <SectionCard title="About">
-        <div className="space-y-4">
-          <EditableField label="Headline" value={safeStr(about?.headline)} onChange={(v) => upd("about", "headline", v)} />
+        <div className="space-y-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <EditableField label="Headline" value={safeStr(about?.headline)} onChange={(v) => upd("about", "headline", v)} />
+          </div>
           <EditableField label="Bio" value={safeStr(about?.bio)} onChange={(v) => upd("about", "bio", v)} multiline />
           <EditableField label="Philosophy" value={safeStr(about?.philosophy)} onChange={(v) => upd("about", "philosophy", v)} multiline />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -274,8 +269,8 @@ export default function AdminDashboard() {
             <EditableField label="Phone" value={safeStr(about?.phone)} onChange={(v) => upd("about", "phone", v)} />
             <EditableField label="Location" value={safeStr(about?.location)} onChange={(v) => upd("about", "location", v)} />
           </div>
-          <details className="bg-gray-50/50 rounded-xl p-5 border border-gray-100 group">
-            <summary className="text-xs font-medium text-gray-500 cursor-pointer group-open:text-gray-700 transition-colors">
+          <details className="bg-gray-50/60 rounded-xl p-5 border border-gray-100 group">
+            <summary className="text-sm font-medium text-gray-600 cursor-pointer group-open:text-gray-800 transition-colors">
               Education &amp; Certifications
             </summary>
             <div className="mt-4 space-y-4">
@@ -300,34 +295,38 @@ export default function AdminDashboard() {
             </div>
           </details>
         </div>
-        <div className="mt-4">
+        <div className="mt-5">
           <ImageUploader label="About Image" currentUrl={safeStr(about?.image)} onUpload={imgUp("about", "image")} />
         </div>
       </SectionCard>
 
       <SectionCard title="Skills">
-        <PageSection title="Categories">
-          <ArrayEditor
-            items={(skills?.categories as SubItem[]) || []}
-            onChange={(items) => updObjArr("skills", "categories", items)}
-            titleKey="title"
-            fields={[
-              { key: "title", label: "Category Title" },
-              { key: "icon", label: "Icon (monitor, search, layers, grid)" },
-            ]}
-          />
-        </PageSection>
-        <PageSection title="Tools">
-          <ArrayEditor
-            items={(skills?.tools as SubItem[]) || []}
-            onChange={(items) => updObjArr("skills", "tools", items)}
-            titleKey="name"
-            fields={[
-              { key: "name", label: "Tool Name" },
-              { key: "level", label: "Proficiency (0-100)" },
-            ]}
-          />
-        </PageSection>
+        <div className="space-y-8">
+          <div>
+            <h4 className="text-sm font-bold text-gray-800 mb-4">Categories</h4>
+            <ArrayEditor
+              items={(skills?.categories as SubItem[]) || []}
+              onChange={(items) => updObjArr("skills", "categories", items)}
+              titleKey="title"
+              fields={[
+                { key: "title", label: "Category Title" },
+                { key: "icon", label: "Icon (monitor, search, layers, grid)" },
+              ]}
+            />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-gray-800 mb-4">Tools</h4>
+            <ArrayEditor
+              items={(skills?.tools as SubItem[]) || []}
+              onChange={(items) => updObjArr("skills", "tools", items)}
+              titleKey="name"
+              fields={[
+                { key: "name", label: "Tool Name" },
+                { key: "level", label: "Proficiency (0-100)" },
+              ]}
+            />
+          </div>
+        </div>
       </SectionCard>
 
       <SectionCard title="Services">
@@ -384,46 +383,31 @@ export default function AdminDashboard() {
           ]}
         />
       </SectionCard>
-
-      <div className="sticky bottom-0 pb-8 pt-4">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={saveContent}
-            disabled={saving}
-            className="px-6 py-2.5 bg-[#1A1A1A] text-white rounded-full text-sm font-medium hover:bg-gray-800 disabled:opacity-40 transition-all"
-          >
-            {saving ? "Saving..." : "Save Changes"}
-          </button>
-          {message && (
-            <span className="text-xs text-gray-400">{message}</span>
-          )}
-        </div>
-      </div>
     </div>
   );
 
   const renderSubmissions = () => (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-sm font-semibold text-gray-700">Submissions</h3>
-        <span className="text-xs text-gray-300 bg-gray-50 px-3 py-1 rounded-full">
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-lg font-bold text-gray-800">Submissions</h2>
+        <span className="text-xs font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
           {Array.isArray(submissions) ? submissions.length : 0} total
         </span>
       </div>
       {!Array.isArray(submissions) || submissions.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] p-10 text-center">
-          <p className="text-sm text-gray-300">No submissions yet.</p>
+        <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm p-12 text-center">
+          <p className="text-sm text-gray-400">No submissions yet.</p>
         </div>
       ) : (
         <div className="space-y-3">
           {submissions.map((sub, i) => (
-            <div key={sub?.id ? String(sub.id) : i} className="bg-white rounded-2xl border border-gray-100 shadow-[0_1px_3px_0_rgba(0,0,0,0.04)] p-6">
+            <div key={sub?.id ? String(sub.id) : i} className="bg-white rounded-2xl border border-gray-200/60 shadow-sm p-6">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <p className="text-sm font-medium text-gray-700">{safeStr(sub?.name)}</p>
-                  <p className="text-xs text-gray-300">{safeStr(sub?.email)}</p>
+                  <p className="text-sm font-semibold text-gray-800">{safeStr(sub?.name)}</p>
+                  <p className="text-xs text-gray-500">{safeStr(sub?.email)}</p>
                 </div>
-                <span className="text-[11px] text-gray-300 whitespace-nowrap ml-4">
+                <span className="text-xs text-gray-400 whitespace-nowrap ml-4">
                   {sub?.timestamp
                     ? new Date(String(sub.timestamp)).toLocaleDateString("en-US", {
                         month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit",
@@ -431,21 +415,36 @@ export default function AdminDashboard() {
                     : ""}
                 </span>
               </div>
-              <p className="text-sm text-gray-500 leading-relaxed">{safeStr(sub?.message)}</p>
+              <p className="text-sm text-gray-600 leading-relaxed">{safeStr(sub?.message)}</p>
             </div>
           ))}
         </div>
       )}
+
+      <div className="sticky bottom-0 pb-8 pt-6 bg-gradient-to-t from-[#F9F9F7] via-[#F9F9F7] to-transparent">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={saveContent}
+            disabled={saving}
+            className="px-6 py-2.5 bg-[#1A1A1A] text-white rounded-lg text-sm font-medium hover:bg-gray-800 disabled:opacity-40 transition-all shadow-sm"
+          >
+            {saving ? "Saving..." : "Save Changes"}
+          </button>
+          {message && (
+            <span className="text-sm text-gray-500 font-medium">{message}</span>
+          )}
+        </div>
+      </div>
     </div>
   );
 
   const renderSettings = () => (
-    <div>
+    <div className="space-y-8">
       <SectionCard title="Environment Variables">
-        <p className="text-xs text-gray-400 mb-4">
-          Set these in your <code className="bg-gray-50 px-1.5 py-0.5 rounded text-[11px] font-mono">.env.local</code> file:
+        <p className="text-sm text-gray-500 mb-4">
+          Set these in your <code className="bg-gray-100 px-1.5 py-0.5 rounded text-xs font-mono text-gray-700">.env.local</code> file:
         </p>
-        <pre className="bg-gray-50 rounded-xl p-4 text-[11px] text-gray-500 overflow-x-auto font-mono leading-relaxed">
+        <pre className="bg-gray-50 rounded-xl p-5 text-xs text-gray-700 overflow-x-auto font-mono leading-relaxed border border-gray-100">
 {`ADMIN_PASSWORD=admin2024
 GITHUB_TOKEN=your_token
 GITHUB_REPO=username/repo
@@ -457,7 +456,7 @@ CLOUDINARY_API_SECRET=your_secret`}
       </SectionCard>
       <button
         onClick={logout}
-        className="mt-4 px-6 py-2.5 border border-red-100 text-red-400 rounded-full text-sm font-medium hover:bg-red-50 hover:border-red-200 transition-all"
+        className="px-6 py-2.5 border border-red-200 text-red-500 rounded-lg text-sm font-medium hover:bg-red-50 hover:border-red-300 transition-all"
       >
         Sign Out
       </button>
@@ -467,20 +466,20 @@ CLOUDINARY_API_SECRET=your_secret`}
   return (
     <div className="min-h-screen bg-[#F9F9F7] flex">
       {/* Sidebar */}
-      <aside className="hidden lg:flex flex-col w-56 bg-white border-r border-gray-100 p-4 shrink-0">
+      <aside className="hidden lg:flex flex-col w-60 bg-white border-r border-gray-200/60 p-4 shrink-0">
         <div className="px-3 pt-2 pb-8">
-          <h2 className="text-sm font-semibold text-gray-700 tracking-tight">Admin</h2>
-          <p className="text-[11px] text-gray-300 mt-0.5">Sunita Thapa</p>
+          <h2 className="text-sm font-bold text-gray-800 tracking-tight">Admin</h2>
+          <p className="text-xs text-gray-500 mt-0.5">Sunita Thapa</p>
         </div>
         <nav className="flex-1 space-y-1">
           {TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                 activeTab === tab.id
-                  ? "bg-gray-50 text-gray-800"
-                  : "text-gray-400 hover:text-gray-600 hover:bg-gray-50/50"
+                  ? "bg-gray-100 text-gray-900"
+                  : "text-gray-500 hover:text-gray-800 hover:bg-gray-50"
               }`}
             >
               <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -493,13 +492,13 @@ CLOUDINARY_API_SECRET=your_secret`}
       </aside>
 
       {/* Mobile tabs */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-100 px-4 py-3 flex gap-2 overflow-x-auto">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-white border-b border-gray-200/60 px-4 py-3 flex gap-2 overflow-x-auto">
         {TABS.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`shrink-0 px-4 py-2 rounded-full text-xs font-medium transition-all ${
-              activeTab === tab.id ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-400"
+            className={`shrink-0 px-4 py-2 rounded-lg text-xs font-medium transition-all ${
+              activeTab === tab.id ? "bg-gray-900 text-white shadow-sm" : "bg-gray-100 text-gray-600"
             }`}
           >
             {tab.label}
@@ -508,24 +507,33 @@ CLOUDINARY_API_SECRET=your_secret`}
       </div>
 
       {/* Main */}
-      <main className="flex-1 p-6 lg:p-8 lg:pt-8 pt-20 max-w-4xl min-h-screen">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-lg font-semibold text-gray-700">
+      <main className="flex-1 p-6 lg:p-10 lg:pt-10 pt-20 mx-auto w-full max-w-5xl min-h-screen">
+        <div className="flex items-center justify-between mb-10">
+          <h1 className="text-xl font-bold text-gray-800">
             {activeTab === "content" ? "Content" : activeTab === "submissions" ? "Submissions" : "Settings"}
           </h1>
-          {activeTab === "content" && (
-            <button
-              onClick={saveContent}
-              disabled={saving}
-              className="px-5 py-2 bg-[#1A1A1A] text-white rounded-full text-xs font-medium hover:bg-gray-800 disabled:opacity-40 transition-all"
-            >
-              {saving ? "Saving..." : "Save"}
-            </button>
-          )}
         </div>
-        {activeTab === "content" && renderContent()}
+        {activeTab === "content" && contentSections}
         {activeTab === "submissions" && renderSubmissions()}
         {activeTab === "settings" && renderSettings()}
+
+        {/* Sticky save bar for content tab */}
+        {activeTab === "content" && (
+          <div className="sticky bottom-0 pb-8 pt-6 bg-gradient-to-t from-[#F9F9F7] via-[#F9F9F7] to-transparent mt-12">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={saveContent}
+                disabled={saving}
+                className="px-6 py-2.5 bg-[#1A1A1A] text-white rounded-lg text-sm font-medium hover:bg-gray-800 disabled:opacity-40 transition-all shadow-sm"
+              >
+                {saving ? "Saving..." : "Save Changes"}
+              </button>
+              {message && (
+                <span className="text-sm text-gray-500 font-medium">{message}</span>
+              )}
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );

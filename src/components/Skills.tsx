@@ -82,7 +82,7 @@ export default function Skills({ skills }: { skills: SkillsData }) {
                   {cat.items.map((item) => (
                     <li
                       key={item}
-                      className="text-sm text-[#1A1A1A]/50 flex items-center gap-2"
+                      className="text-sm text-[#1A1A1A]/70 flex items-center gap-2"
                     >
                       <span className="w-1 h-1 rounded-full bg-[#8B5CF6]/40" />
                       {item}
@@ -108,7 +108,7 @@ export default function Skills({ skills }: { skills: SkillsData }) {
                 <span className="text-sm font-medium text-[#1A1A1A]">
                   {tool.name}
                 </span>
-                <span className="text-xs text-[#1A1A1A]/40">{tool.level}%</span>
+                <span className="text-xs text-[#1A1A1A]/60">{tool.level}%</span>
               </div>
               <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
                 <motion.div

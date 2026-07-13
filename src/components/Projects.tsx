@@ -80,7 +80,7 @@ export default function Projects({ projects }: { projects: Project[] }) {
               className={`px-5 py-2.5 rounded-full text-xs font-medium tracking-wide transition-all ${
                 filter === cat
                   ? "bg-[#1A1A1A] text-white"
-                  : "bg-gray-50 text-[#1A1A1A]/50 hover:bg-gray-100"
+                  : "bg-gray-50 text-[#1A1A1A]/70 hover:bg-gray-100"
               }`}
               aria-pressed={filter === cat}
             >
