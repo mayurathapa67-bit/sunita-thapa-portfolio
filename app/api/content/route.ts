@@ -50,7 +50,7 @@ export async function GET() {
         });
       }
     } catch (localError) {
-      console.warn('⚠️ Local file read failed:', localError);
+      console.warn('⚠️ Local file read failed (this is normal on Vercel):', localError);
     }
 
     // 3. Ultimate safe fallback if both fail
