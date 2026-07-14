@@ -74,11 +74,13 @@ function ArrayEditor({
   onChange,
   fields,
   titleKey = "title",
+  renderItemExtra,
 }: {
   items: SubItem[];
   onChange: (items: SubItem[]) => void;
   fields: { key: string; label: string; multiline?: boolean }[];
   titleKey?: string;
+  renderItemExtra?: (item: SubItem, index: number) => React.ReactNode;
 }) {
   const safeItems = Array.isArray(items) ? items : [];
 
@@ -143,6 +145,7 @@ function ArrayEditor({
                 );
               })}
             </div>
+            {renderItemExtra?.(item, i)}
           </div>
         ))
       )}
@@ -168,6 +171,8 @@ export default function AdminDashboard() {
   const [submissions, setSubmissions] = useState<Record<string, unknown>[]>([]);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [subError, setSubError] = useState("");
   const loaded = useRef(false);
 
   useEffect(() => {
@@ -192,6 +197,24 @@ export default function AdminDashboard() {
     } catch { setMessage("Error saving"); }
     setSaving(false);
   }, [content]);
+
+  const deleteSubmission = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this submission?")) return;
+    setDeletingId(id);
+    setSubError("");
+    try {
+      const res = await fetch(`/api/submissions?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error || "Failed to delete");
+      }
+      const updated = await fetch("/api/submissions").then((r) => r.json());
+      setSubmissions(updated);
+    } catch {
+      setSubError("Failed to delete submission. Please try again.");
+    }
+    setDeletingId(null);
+  };
 
   if (!isAuthenticated) return null;
 
@@ -352,6 +375,31 @@ export default function AdminDashboard() {
             { key: "category", label: "Category (Mobile, Web, Dashboard)" },
             { key: "description", label: "Description", multiline: true },
           ]}
+          renderItemExtra={(item, i) => (
+            <div className="mt-4 border-t border-gray-100 pt-4">
+              <ImageUploader
+                label="Project Image"
+                currentUrl={safeStr(item?.image)}
+                onUpload={(url) => {
+                  const next = [...projects];
+                  next[i] = { ...next[i], image: url };
+                  updArr("projects", next);
+                }}
+              />
+              {item?.image ? (
+                <button
+                  onClick={() => {
+                    const next = [...projects];
+                    next[i] = { ...next[i], image: "" };
+                    updArr("projects", next);
+                  }}
+                  className="mt-2 text-xs text-red-400 hover:text-red-600 transition-colors font-medium"
+                >
+                  Remove image
+                </button>
+              ) : null}
+            </div>
+          )}
         />
       </SectionCard>
 
@@ -394,6 +442,11 @@ export default function AdminDashboard() {
           {Array.isArray(submissions) ? submissions.length : 0} total
         </span>
       </div>
+      {subError && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
+          {subError}
+        </div>
+      )}
       {!Array.isArray(submissions) || submissions.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm p-12 text-center">
           <p className="text-sm text-gray-400">No submissions yet.</p>
@@ -407,34 +460,28 @@ export default function AdminDashboard() {
                   <p className="text-sm font-semibold text-gray-800">{safeStr(sub?.name)}</p>
                   <p className="text-xs text-gray-500">{safeStr(sub?.email)}</p>
                 </div>
-                <span className="text-xs text-gray-400 whitespace-nowrap ml-4">
-                  {sub?.timestamp
-                    ? new Date(String(sub.timestamp)).toLocaleDateString("en-US", {
-                        month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit",
-                      })
-                    : ""}
-                </span>
+                <div className="flex items-center gap-3 shrink-0 ml-4">
+                  <span className="text-xs text-gray-400 whitespace-nowrap">
+                    {sub?.timestamp
+                      ? new Date(String(sub.timestamp)).toLocaleDateString("en-US", {
+                          month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit",
+                        })
+                      : ""}
+                  </span>
+                  <button
+                    onClick={() => deleteSubmission(String(sub.id))}
+                    disabled={deletingId === String(sub.id)}
+                    className="text-xs text-red-400 hover:text-red-600 disabled:opacity-40 transition-colors font-medium whitespace-nowrap"
+                  >
+                    {deletingId === String(sub.id) ? "Deleting..." : "Delete"}
+                  </button>
+                </div>
               </div>
               <p className="text-sm text-gray-600 leading-relaxed">{safeStr(sub?.message)}</p>
             </div>
           ))}
         </div>
       )}
-
-      <div className="sticky bottom-0 pb-8 pt-6 bg-gradient-to-t from-[#F9F9F7] via-[#F9F9F7] to-transparent">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={saveContent}
-            disabled={saving}
-            className="px-6 py-2.5 bg-[#1A1A1A] text-white rounded-lg text-sm font-medium hover:bg-gray-800 disabled:opacity-40 transition-all shadow-sm"
-          >
-            {saving ? "Saving..." : "Save Changes"}
-          </button>
-          {message && (
-            <span className="text-sm text-gray-500 font-medium">{message}</span>
-          )}
-        </div>
-      </div>
     </div>
   );
 
