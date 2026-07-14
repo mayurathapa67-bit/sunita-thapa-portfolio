@@ -1,7 +1,5 @@
 export const dynamic = 'force-dynamic';
 
-import fs from "fs";
-import path from "path";
 import Projects from "@/components/Projects";
 
 type Project = {
@@ -15,14 +13,12 @@ type Project = {
   featured: boolean;
 };
 
-function getProjectsData(): { projects: Project[] } {
-  const filePath = path.join(process.cwd(), "content.json");
-  const raw = fs.readFileSync(filePath, "utf-8");
-  const content = JSON.parse(raw);
-  return { projects: content.projects };
-}
-
-export default function ProjectsPage() {
-  const { projects } = getProjectsData();
+export default async function ProjectsPage() {
+  const res = await fetch('https://sunita-thapa.vercel.app/api/content?t=' + Date.now(), {
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  });
+  const data = await res.json();
+  const { projects } = data as { projects: Project[] };
   return <Projects projects={projects} />;
 }

@@ -1,7 +1,5 @@
 export const dynamic = 'force-dynamic';
 
-import fs from "fs";
-import path from "path";
 import Contact from "@/components/Contact";
 
 type ContactData = {
@@ -12,14 +10,12 @@ type ContactData = {
   cta: string;
 };
 
-function getContactData(): { contact: ContactData } {
-  const filePath = path.join(process.cwd(), "content.json");
-  const raw = fs.readFileSync(filePath, "utf-8");
-  const content = JSON.parse(raw);
-  return { contact: content.contact };
-}
-
-export default function ContactPage() {
-  const { contact } = getContactData();
+export default async function ContactPage() {
+  const res = await fetch('https://sunita-thapa.vercel.app/api/content?t=' + Date.now(), {
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  });
+  const data = await res.json();
+  const { contact } = data as { contact: ContactData };
   return <Contact contact={contact} />;
 }

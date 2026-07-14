@@ -1,7 +1,5 @@
 export const dynamic = 'force-dynamic';
 
-import fs from "fs";
-import path from "path";
 import About from "@/components/About";
 
 type AboutData = {
@@ -18,14 +16,12 @@ type AboutData = {
   location: string;
 };
 
-function getAboutData(): { about: AboutData } {
-  const filePath = path.join(process.cwd(), "content.json");
-  const raw = fs.readFileSync(filePath, "utf-8");
-  const content = JSON.parse(raw);
-  return { about: content.about };
-}
-
-export default function AboutPage() {
-  const { about } = getAboutData();
+export default async function AboutPage() {
+  const res = await fetch('https://sunita-thapa.vercel.app/api/content?t=' + Date.now(), {
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  });
+  const data = await res.json();
+  const { about } = data as { about: AboutData };
   return <About about={about} />;
 }

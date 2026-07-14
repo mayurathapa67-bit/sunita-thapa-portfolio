@@ -34,13 +34,17 @@ export async function GET() {
           'Authorization': `token ${token}`,
           'Accept': 'application/vnd.github.v3+json'
         },
-        cache: 'no-store'
+        cache: 'no-store',
+        next: { revalidate: 0 }
       });
 
       if (response.ok) {
         const data: GitHubFileResponse = await response.json() as GitHubFileResponse;
         const content: string = Buffer.from(data.content, 'base64').toString('utf-8');
-        return NextResponse.json(JSON.parse(content) as Content);
+        const parsed = JSON.parse(content) as Content;
+        return NextResponse.json(parsed, {
+          headers: { 'Cache-Control': 'no-store, max-age=0' }
+        });
       }
     }
 

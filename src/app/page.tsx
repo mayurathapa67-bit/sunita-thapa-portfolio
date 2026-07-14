@@ -1,7 +1,5 @@
 export const dynamic = 'force-dynamic';
 
-import fs from "fs";
-import path from "path";
 import Hero from "@/components/Hero";
 import Skills from "@/components/Skills";
 import Process from "@/components/Process";
@@ -26,14 +24,12 @@ type Content = {
   }[];
 };
 
-function getContent(): Content {
-  const filePath = path.join(process.cwd(), "content.json");
-  const raw = fs.readFileSync(filePath, "utf-8");
-  return JSON.parse(raw);
-}
-
-export default function Home() {
-  const content = getContent();
+export default async function Home() {
+  const res = await fetch('https://sunita-thapa.vercel.app/api/content?t=' + Date.now(), {
+    cache: 'no-store',
+    next: { revalidate: 0 }
+  });
+  const content: Content = await res.json();
 
   return (
     <>
