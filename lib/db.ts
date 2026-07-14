@@ -1,24 +1,35 @@
-// SAFE VERSION - NO FILE READING
-// Returns empty objects on Vercel, API routes will fetch from GitHub
+import type { PortfolioData } from "./types";
 
-export function readDB() {
-  return {}; // Always return empty - pages should use API instead
+export function readDB(): PortfolioData {
+  return {
+    personal: {} as PortfolioData["personal"],
+    nav: {} as PortfolioData["nav"],
+    hero: {} as PortfolioData["hero"],
+    about: {} as PortfolioData["about"],
+    services: [],
+    portfolio: [],
+    blog: [],
+    stats: [],
+    experience: [],
+    testimonials: [],
+    contact: {} as PortfolioData["contact"],
+    socials: {} as PortfolioData["socials"],
+  };
 }
 
-export function writeDB(data: any) {
-  console.warn('writeDB called but not implemented for Vercel');
-  return false;
+export function writeDB(_data: PortfolioData, _mode?: string): { github: boolean } {
+  console.warn("writeDB called but not implemented for Vercel");
+  return { github: false };
 }
 
-export function readDrafts() {
+export function readDrafts(): Partial<PortfolioData> {
   return {};
 }
 
-export function writeDrafts(data: any) {
-  console.warn('writeDrafts called but not implemented for Vercel');
-  return false;
+export function writeDrafts(_data: Partial<PortfolioData>): void {
+  console.warn("writeDrafts called but not implemented for Vercel");
 }
 
-export function clearDraft(section: string) {
-  return false;
+export function clearDraft(_section: keyof PortfolioData): void {
+  /* no-op */
 }
