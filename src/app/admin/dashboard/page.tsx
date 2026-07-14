@@ -181,6 +181,12 @@ export default function AdminDashboard() {
     loaded.current = true;
     fetch("/api/content", { cache: "no-store" }).then((r) => r.json()).then((d) => setContent(d || {})).catch(() => setContent({}));
     fetch("/api/submissions").then((r) => r.json()).then(setSubmissions).catch(() => {});
+
+    const interval = setInterval(() => {
+      fetch("/api/submissions").then((r) => r.json()).then(setSubmissions).catch(() => {});
+    }, 8000);
+
+    return () => clearInterval(interval);
   }, [isAuthenticated, router]);
 
   const saveContent = useCallback(async () => {
@@ -438,9 +444,18 @@ export default function AdminDashboard() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <h2 className="text-lg font-bold text-gray-800">Submissions</h2>
-        <span className="text-xs font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-          {Array.isArray(submissions) ? submissions.length : 0} total
-        </span>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-green-50 rounded-full border border-green-100">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+            </span>
+            <span className="text-xs font-semibold text-green-700 tracking-wide uppercase">Live • 8s</span>
+          </div>
+          <span className="text-xs font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+            {Array.isArray(submissions) ? submissions.length : 0} total
+          </span>
+        </div>
       </div>
       {subError && (
         <div className="mb-4 p-3 bg-red-50 border border-red-100 rounded-xl text-sm text-red-600">
