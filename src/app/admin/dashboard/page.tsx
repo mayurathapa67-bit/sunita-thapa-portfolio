@@ -174,7 +174,7 @@ export default function AdminDashboard() {
     if (!isAuthenticated) return void router.push("/admin");
     if (loaded.current) return;
     loaded.current = true;
-    fetch("/api/content").then((r) => r.json()).then((d) => setContent(d || {})).catch(() => setContent({}));
+    fetch("/api/content", { cache: "no-store" }).then((r) => r.json()).then((d) => setContent(d || {})).catch(() => setContent({}));
     fetch("/api/submissions").then((r) => r.json()).then(setSubmissions).catch(() => {});
   }, [isAuthenticated, router]);
 
