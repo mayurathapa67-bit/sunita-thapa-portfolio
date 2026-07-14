@@ -185,6 +185,23 @@ export default function Hero({ hero }: { hero: HeroData }) {
             Based in {hero.location}
           </motion.p>
         </div>
+
+        {/* Hero Image - Profile/Showcase Photo */}
+        {hero.image && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, x: 50 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            className="hidden lg:block absolute top-1/2 right-10 xl:right-24 transform -translate-y-1/2 w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-[28rem] rounded-3xl overflow-hidden shadow-2xl"
+          >
+            <img
+              key={hero.image}
+              src={`${hero.image}?t=${new Date().getTime()}`}
+              alt={hero.title}
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+        )}
       </div>
     </section>
   );
