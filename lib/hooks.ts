@@ -3,7 +3,7 @@
 import useSWR from "swr";
 
 const fetcher = (url: string) =>
-  fetch(url, { cache: "no-store", next: { revalidate: 0 } } as RequestInit).then((r) =>
+  fetch(url, { cache: "no-store" } as RequestInit).then((r) =>
     r.json()
   );
 

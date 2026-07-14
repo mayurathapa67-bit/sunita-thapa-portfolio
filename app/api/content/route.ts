@@ -1,159 +1,140 @@
-import { NextResponse } from 'next/server'
-import fs from 'fs/promises'
-import path from 'path'
+import { NextResponse } from 'next/server';
+import fs from 'fs';
+import path from 'path';
 
-export const dynamic = 'force-dynamic'
-
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  const section = searchParams.get('section')
-
+// GET: Fetch content from GitHub (or safe fallback)
+export async function GET() {
   try {
-    const dbPath = path.join(process.cwd(), 'data', 'db.json')
-    const seedPath = path.join(process.cwd(), 'data', 'seed.json')
+    const token = process.env.GITHUB_TOKEN;
+    const repo = process.env.GITHUB_REPO;
+    const branch = process.env.GITHUB_BRANCH || 'main';
 
-    let data
+    // 1. Try to fetch from GitHub first (Works on Vercel and Localhost)
+    if (token && repo) {
+      try {
+        const url = `https://api.github.com/repos/${repo}/contents/content.json?ref=${branch}`;
+        const response = await fetch(url, {
+          headers: {
+            'Authorization': `token ${token}`,
+            'Accept': 'application/vnd.github.v3+json'
+          },
+          cache: 'no-store' // ONLY use cache: 'no-store' (fixes the warning)
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const content = Buffer.from(data.content, 'base64').toString('utf-8');
+          const parsedContent = JSON.parse(content);
+          
+          return NextResponse.json(parsedContent, {
+            headers: {
+              'Cache-Control': 'no-store, max-age=0, must-revalidate'
+            }
+          });
+        }
+      } catch (githubError) {
+        console.warn('⚠️ GitHub fetch failed, falling back to local file:', githubError);
+      }
+    }
+
+    // 2. Fallback to local file (ONLY for localhost development)
+    // Wrapped in try/catch so it NEVER crashes Vercel if the file is missing
     try {
-      const dbData = await fs.readFile(dbPath, 'utf-8')
-      data = JSON.parse(dbData)
-    } catch {
-      const seedData = await fs.readFile(seedPath, 'utf-8')
-      data = JSON.parse(seedData)
+      const filePath = path.join(process.cwd(), 'content.json');
+      if (fs.existsSync(filePath)) {
+        const fileContents = fs.readFileSync(filePath, 'utf8');
+        return NextResponse.json(JSON.parse(fileContents), {
+          headers: {
+            'Cache-Control': 'no-store, max-age=0, must-revalidate'
+          }
+        });
+      }
+    } catch (localError) {
+      console.warn('⚠️ Local file read failed:', localError);
     }
 
-    if (section) {
-      return NextResponse.json(data[section] || {}, {
-        headers: { "Cache-Control": "no-store, max-age=0" },
-      })
-    }
-    return NextResponse.json(data, {
-      headers: { "Cache-Control": "no-store, max-age=0" },
-    })
+    // 3. Ultimate safe fallback if both fail
+    console.error('❌ Could not load content from GitHub or local file.');
+    return NextResponse.json({ error: 'Content not found' }, { status: 404 });
+
   } catch (error) {
-    console.error('[API Read error]:', error)
-    return NextResponse.json({ error: 'Failed to read' }, { status: 500 })
+    console.error('❌ GET /api/content critical error:', error);
+    return NextResponse.json({ error: 'Failed to fetch content' }, { status: 500 });
   }
 }
 
-export async function POST(request: Request) {
+// PUT: Save content to GitHub (with robust SHA handling)
+export async function PUT(request: Request) {
   try {
-    const body = await request.json()
-    console.log('[API] Starting publish process')
+    const newContent = await request.json();
+    const token = process.env.GITHUB_TOKEN;
+    const repo = process.env.GITHUB_REPO;
+    const branch = process.env.GITHUB_BRANCH || 'main';
 
-    const githubToken = process.env.GITHUB_TOKEN
-    const githubRepo = process.env.GITHUB_REPO
-    const githubBranch = process.env.GITHUB_BRANCH || 'main'
-
-    console.log('[API] Environment check:', {
-      hasGithubToken: !!githubToken,
-      tokenStartsWith: githubToken?.substring(0, 10) + '...',
-      githubRepo: githubRepo,
-      githubBranch: githubBranch
-    })
-
-    if (!githubToken || !githubRepo) {
-      return NextResponse.json({
-        error: 'GitHub credentials not configured',
-        hasToken: !!githubToken,
-        hasRepo: !!githubRepo
-      }, { status: 500 })
+    // 1. Try to save locally (will fail on Vercel, which is perfectly fine)
+    try {
+      const filePath = path.join(process.cwd(), 'content.json');
+      fs.writeFileSync(filePath, JSON.stringify(newContent, null, 2), 'utf8');
+      console.log('✅ Local content.json updated');
+    } catch (localError) {
+      console.warn('⚠️ Local save skipped (read-only filesystem):', localError);
     }
 
-    const url = `https://api.github.com/repos/${githubRepo}/contents/data/seed.json?ref=${githubBranch}`
-    console.log('[API] Fetching from:', url)
+    // 2. Push to GitHub
+    if (!token || !repo) {
+      console.error('❌ GitHub credentials missing for content update.');
+      return NextResponse.json({ error: 'GitHub credentials missing in environment variables' }, { status: 500 });
+    }
 
+    const url = `https://api.github.com/repos/${repo}/contents/content.json?ref=${branch}`;
+    
+    // Fetch current SHA
+    let sha = '';
     const getResponse = await fetch(url, {
       headers: {
-        'Authorization': `token ${githubToken}`,
+        'Authorization': `token ${token}`,
         'Accept': 'application/vnd.github.v3+json'
       }
-    })
+    });
 
-    console.log('[API] GitHub response status:', getResponse.status, getResponse.statusText)
-
-    if (!getResponse.ok) {
-      const errorText = await getResponse.text()
-      console.error('[API] GitHub API error:', {
-        status: getResponse.status,
-        statusText: getResponse.statusText,
-        body: errorText
-      })
-      return NextResponse.json({
-        error: 'Failed to fetch current seed.json from GitHub',
-        githubStatus: getResponse.status,
-        githubError: errorText
-      }, { status: 500 })
+    if (getResponse.ok) {
+      const data = await getResponse.json();
+      sha = data.sha;
     }
 
-    const currentFile = await getResponse.json()
-    const currentContent = Buffer.from(currentFile.content, 'base64').toString('utf-8')
-    let currentData: Record<string, unknown>
-    try {
-      currentData = JSON.parse(currentContent)
-    } catch (parseErr) {
-      console.error('[API] Failed to parse current seed.json content:', {
-        error: parseErr,
-        contentPreview: currentContent.substring(0, 200),
-      })
-      return NextResponse.json({
-        error: 'Failed to parse existing seed.json',
-        details: parseErr instanceof Error ? parseErr.message : 'Parse error',
-      }, { status: 500 })
+    const contentBase64 = Buffer.from(JSON.stringify(newContent, null, 2)).toString('base64');
+
+    const putBody: { message: string; content: string; branch: string; sha?: string } = {
+      message: 'chore: update content.json via admin panel',
+      content: contentBase64,
+      branch: branch
+    };
+
+    if (sha) {
+      putBody.sha = sha;
     }
 
-    const source = body.data || body
-    const merged = { ...currentData, ...source }
-    const cleanedData = Object.fromEntries(
-      Object.entries(merged).filter(([key]) => key !== 'password' && key !== 'data')
-    )
-    const newContent = JSON.stringify(cleanedData, null, 2)
-    const newContentBase64 = Buffer.from(newContent).toString('base64')
+    const putResponse = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(putBody)
+    });
 
-    const commitResponse = await fetch(
-      `https://api.github.com/repos/${githubRepo}/contents/data/seed.json`,
-      {
-        method: 'PUT',
-        headers: {
-          'Authorization': `token ${githubToken}`,
-          'Accept': 'application/vnd.github.v3+json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: 'Update portfolio content via admin panel',
-          content: newContentBase64,
-          sha: currentFile.sha,
-          branch: githubBranch,
-        })
-      }
-    )
-
-    if (!commitResponse.ok) {
-      const errorText = await commitResponse.text()
-      console.error('[API] GitHub PUT (commit) failed:', {
-        status: commitResponse.status,
-        statusText: commitResponse.statusText,
-        body: errorText,
-      })
-      return NextResponse.json({
-        error: 'Failed to commit to GitHub',
-        githubStatus: commitResponse.status,
-        githubError: errorText,
-      }, { status: 500 })
+    if (!putResponse.ok) {
+      const errorData = await putResponse.json();
+      console.error('❌ GitHub PUT error:', errorData);
+      return NextResponse.json({ error: 'Failed to update GitHub', details: errorData }, { status: 500 });
     }
 
-    const commitResult = await commitResponse.json()
-    console.log('[API] Successfully committed to GitHub:', commitResult.commit?.sha)
+    console.log('✅ Content successfully saved to GitHub!');
+    return NextResponse.json({ success: true, message: 'Content saved successfully!' });
 
-    return NextResponse.json({
-      success: true,
-      message: 'Changes committed to GitHub. Vercel will redeploy automatically.',
-      commitSha: commitResult.commit?.sha,
-    })
   } catch (error) {
-    console.error('[API] Publish error:', error)
-    return NextResponse.json({
-      error: 'Failed to publish',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 })
+    console.error('❌ PUT /api/content error:', error);
+    return NextResponse.json({ error: 'Failed to save content' }, { status: 500 });
   }
 }

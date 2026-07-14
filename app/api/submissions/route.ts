@@ -22,7 +22,7 @@ export async function GET() {
         Authorization: `token ${token}`,
         Accept: "application/vnd.github.v3+json",
       },
-      next: { revalidate: 0 },
+      cache: "no-store",
     });
 
     if (response.status === 404) {
