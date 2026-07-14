@@ -27,7 +27,6 @@ export async function GET() {
     const repo = process.env.GITHUB_REPO;
     const branch = process.env.GITHUB_BRANCH || 'main';
 
-    // Try to fetch from GitHub first
     if (token && repo) {
       const url = `https://api.github.com/repos/${repo}/contents/content.json?ref=${branch}`;
       const response = await fetch(url, {
@@ -35,7 +34,7 @@ export async function GET() {
           'Authorization': `token ${token}`,
           'Accept': 'application/vnd.github.v3+json'
         },
-        cache: 'no-store' // Always get the latest version
+        cache: 'no-store'
       });
 
       if (response.ok) {
@@ -45,7 +44,6 @@ export async function GET() {
       }
     }
 
-    // Fallback to local file if GitHub fails or no credentials
     const filePath = path.join(process.cwd(), 'content.json');
     if (fs.existsSync(filePath)) {
       const fileContents: string = fs.readFileSync(filePath, 'utf8');
@@ -57,6 +55,74 @@ export async function GET() {
     console.error('GET /api/content error:', error);
     return NextResponse.json({ error: 'Failed to fetch content' }, { status: 500 });
   }
+}
+
+async function getLatestSha(repo: string, branch: string, token: string): Promise<string | null> {
+  const url = `https://api.github.com/repos/${repo}/contents/content.json?ref=${branch}`;
+  const response = await fetch(url, {
+    headers: {
+      'Authorization': `token ${token}`,
+      'Accept': 'application/vnd.github.v3+json'
+    }
+  });
+
+  if (response.status === 404) return null;
+  if (!response.ok) {
+    const errorData: GitHubErrorResponse = await response.json() as GitHubErrorResponse;
+    console.error('❌ Failed to fetch SHA:', errorData);
+    throw new Error('Failed to fetch SHA');
+  }
+
+  const data: GitHubFileResponse = await response.json() as GitHubFileResponse;
+  return data.sha;
+}
+
+function isShaError(errorData: GitHubErrorResponse): boolean {
+  const msg = errorData?.message?.toLowerCase() || '';
+  return msg.includes('sha') || msg.includes('does not match');
+}
+
+async function fetchCurrentFile(repo: string, branch: string, token: string): Promise<{ sha: string; content: Content } | null> {
+  const url = `https://api.github.com/repos/${repo}/contents/content.json?ref=${branch}`;
+  const response = await fetch(url, {
+    headers: {
+      'Authorization': `token ${token}`,
+      'Accept': 'application/vnd.github.v3+json'
+    }
+  });
+
+  if (response.status === 404) return null;
+  if (!response.ok) throw new Error('Failed to fetch current file');
+
+  const data: GitHubFileResponse = await response.json() as GitHubFileResponse;
+  const content: Content = JSON.parse(Buffer.from(data.content, 'base64').toString('utf-8')) as Content;
+  return { sha: data.sha, content };
+}
+
+async function putToGitHub(
+  repo: string,
+  branch: string,
+  token: string,
+  contentBase64: string,
+  sha?: string
+): Promise<Response> {
+  const url = `https://api.github.com/repos/${repo}/contents/content.json?ref=${branch}`;
+  const putBody: GitHubPutBody = {
+    message: 'chore: update content.json via admin panel',
+    content: contentBase64,
+    branch: branch
+  };
+  if (sha) putBody.sha = sha;
+
+  return await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `token ${token}`,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(putBody)
+  });
 }
 
 // PUT: Save content to GitHub (and try local, but ignore if read-only)
@@ -82,52 +148,70 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'GitHub credentials missing in environment variables' }, { status: 500 });
     }
 
-    const url: string = `https://api.github.com/repos/${repo}/contents/content.json?ref=${branch}`;
-    
-    // We need the current SHA to update the file. If it doesn't exist, we create it.
-    let sha: string = '';
-    const getResponse: Response = await fetch(url, {
-      headers: {
-        'Authorization': `token ${token}`,
-        'Accept': 'application/vnd.github.v3+json'
-      }
-    });
-
-    if (getResponse.ok) {
-      const data: GitHubFileResponse = await getResponse.json() as GitHubFileResponse;
-      sha = data.sha;
-    }
-
     const contentBase64: string = Buffer.from(JSON.stringify(newContent, null, 2)).toString('base64');
 
-    const putBody: GitHubPutBody = {
-      message: 'chore: update content.json via admin panel',
-      content: contentBase64,
-      branch: branch
-    };
+    // Always fetch fresh SHA before attempting update
+    const latestSha = await getLatestSha(repo, branch, token);
 
-    if (sha) {
-      putBody.sha = sha;
+    let lastError: GitHubErrorResponse | undefined;
+
+    // Attempt update with retry logic (up to 2 retries on SHA mismatch)
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const sha = latestSha || undefined;
+      const putResponse = await putToGitHub(repo, branch, token, contentBase64, sha);
+
+      if (putResponse.ok) {
+        console.log('✅ Content successfully saved to GitHub!');
+        return NextResponse.json({ success: true, message: 'Content saved successfully!' });
+      }
+
+      lastError = await putResponse.json() as GitHubErrorResponse;
+      console.error(`❌ GitHub PUT error (attempt ${attempt + 1}):`, lastError);
+
+      // If SHA error, fetch fresh SHA and retry
+      if (isShaError(lastError)) {
+        console.log('🔄 SHA mismatch detected. Fetching latest SHA and retrying...');
+        const freshSha = await getLatestSha(repo, branch, token);
+        if (freshSha) {
+          // Merge changes with latest version if not first attempt
+          if (attempt > 0) {
+            const currentFile = await fetchCurrentFile(repo, branch, token);
+            if (currentFile) {
+              const mergedContent = { ...currentFile.content, ...newContent };
+              const mergedBase64 = Buffer.from(JSON.stringify(mergedContent, null, 2)).toString('base64');
+              const retryResponse = await putToGitHub(repo, branch, token, mergedBase64, freshSha);
+              if (retryResponse.ok) {
+                console.log('✅ Content successfully saved after merge!');
+                return NextResponse.json({ success: true, message: 'Content saved successfully!' });
+              }
+              lastError = await retryResponse.json() as GitHubErrorResponse;
+              console.error(`❌ GitHub PUT error after merge:`, lastError);
+            }
+          }
+        }
+        continue;
+      }
+
+      // Non-SHA error, no point retrying
+      break;
     }
 
-    const putResponse: Response = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `token ${token}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(putBody)
-    });
-
-    if (!putResponse.ok) {
-      const errorData: GitHubErrorResponse = await putResponse.json() as GitHubErrorResponse;
-      console.error('❌ GitHub PUT error:', errorData);
-      return NextResponse.json({ error: 'Failed to update GitHub', details: errorData }, { status: 500 });
+    // Force update fallback: fetch current file and overwrite completely
+    console.log('🔄 Attempting force update fallback...');
+    const currentFile = await fetchCurrentFile(repo, branch, token);
+    if (currentFile) {
+      const fallbackBase64 = Buffer.from(JSON.stringify(newContent, null, 2)).toString('base64');
+      const forceResponse = await putToGitHub(repo, branch, token, fallbackBase64, currentFile.sha);
+      if (forceResponse.ok) {
+        console.log('✅ Content saved via force update!');
+        return NextResponse.json({ success: true, message: 'Content saved successfully!' });
+      }
+      const forceError: GitHubErrorResponse = await forceResponse.json() as GitHubErrorResponse;
+      console.error('❌ Force update also failed:', forceError);
     }
 
-    console.log('✅ Content successfully saved to GitHub!');
-    return NextResponse.json({ success: true, message: 'Content saved successfully!' });
+    console.error('❌ All update attempts failed. Last error:', lastError);
+    return NextResponse.json({ error: 'Failed to update GitHub', details: lastError }, { status: 500 });
 
   } catch (error: unknown) {
     console.error('PUT /api/content error:', error);
