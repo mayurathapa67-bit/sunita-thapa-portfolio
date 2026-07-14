@@ -4,7 +4,6 @@ import type { PortfolioData, SectionKey } from "./types";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const DB_PATH = path.join(DATA_DIR, "db.json");
-const SEED_PATH = path.join(DATA_DIR, "seed.json");
 const DRAFTS_PATH = path.join(DATA_DIR, "drafts.json");
 
 export const SECTION_KEYS: SectionKey[] = [
@@ -25,27 +24,33 @@ export const SECTION_KEYS: SectionKey[] = [
 const isVercel =
   process.env.VERCEL === "1" || process.env.VERCEL_ENV != null;
 
-/* ------------------------------- Local files ------------------------------ */
+/* ------------------------------- GitHub / API fetch ------------------------------ */
 
 async function readLocal(): Promise<PortfolioData> {
-  if (isVercel) {
+  const token = process.env.GITHUB_TOKEN;
+  const repo = process.env.GITHUB_REPO;
+  const branch = process.env.GITHUB_BRANCH || "main";
+
+  if (token && repo) {
     try {
-      return JSON.parse(fs.readFileSync(SEED_PATH, "utf-8")) as PortfolioData;
-    } catch {
-      /* ignore */
-    }
-  } else {
-    try {
-      return JSON.parse(fs.readFileSync(DB_PATH, "utf-8")) as PortfolioData;
-    } catch {
-      /* ignore */
-    }
-    try {
-      return JSON.parse(fs.readFileSync(SEED_PATH, "utf-8")) as PortfolioData;
+      const url = `https://api.github.com/repos/${repo}/contents/content.json?ref=${branch}`;
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `token ${token}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+        cache: "no-store",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const content = Buffer.from(data.content, "base64").toString("utf-8");
+        return JSON.parse(content) as PortfolioData;
+      }
     } catch {
       /* ignore */
     }
   }
+
   return {} as PortfolioData;
 }
 
@@ -132,9 +137,10 @@ export async function writeDB(
 
 /* ------------------------------- Drafts (local) ------------------------------ */
 
-export function readDrafts(): Partial<PortfolioData> {
+export async function readDrafts(): Promise<Partial<PortfolioData>> {
   try {
-    return JSON.parse(fs.readFileSync(DRAFTS_PATH, "utf-8")) as Partial<PortfolioData>;
+    const content = await fs.promises.readFile(DRAFTS_PATH, "utf-8");
+    return JSON.parse(content) as Partial<PortfolioData>;
   } catch {
     return {};
   }
@@ -149,8 +155,8 @@ export function writeDrafts(drafts: Partial<PortfolioData>): void {
   }
 }
 
-export function clearDraft(section: SectionKey): void {
-  const drafts = readDrafts();
+export async function clearDraft(section: SectionKey): Promise<void> {
+  const drafts = await readDrafts();
   if (section in drafts) {
     delete (drafts as Record<string, unknown>)[section];
     writeDrafts(drafts);

@@ -69,7 +69,7 @@ export async function POST(
     }
 
     if (publishMode === "draft") {
-      const drafts = readDrafts();
+      const drafts = await readDrafts();
       (drafts as Record<string, unknown>)[section] = data;
       writeDrafts(drafts);
       return NextResponse.json({ success: true, state: "draft" });
@@ -77,7 +77,7 @@ export async function POST(
 
     const db = await readDB();
     (db[section] as PortfolioData[SectionKey]) = data as PortfolioData[SectionKey];
-    clearDraft(section);
+    await clearDraft(section);
 
     if (publishMode === "local") {
       const isVercel = process.env.VERCEL === "1" || process.env.VERCEL_ENV != null;
