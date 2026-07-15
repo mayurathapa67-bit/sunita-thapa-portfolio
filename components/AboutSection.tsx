@@ -14,7 +14,7 @@ export default function AboutSection({
   about: About;
   personal: PersonalInfo;
 }) {
-  const image = imageSrc(about.image) || imageSrc(personal.avatar);
+  const image = imageSrc(about?.image) || imageSrc(personal?.avatar);
 
   return (
     <section id="about" className="section-pad bg-cream">
@@ -57,7 +57,7 @@ export default function AboutSection({
             transition={{ duration: 0.5, delay: 0.1 }}
             className="lg:col-span-7"
           >
-            <p className="text-lg leading-relaxed text-ink/90">{about.bio}</p>
+            <p className="text-lg leading-relaxed text-ink/90">{about?.bio || ""}</p>
 
             <div className="my-8 flex gap-4 rounded-2xl border border-line bg-white/60 p-6 shadow-card">
               <Quote size={28} className="shrink-0 text-burgundy" />

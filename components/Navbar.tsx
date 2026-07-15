@@ -27,7 +27,7 @@ export default function Navbar({
       >
         <Link href="/" className="relative z-10 flex items-center gap-2.5 pl-2">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent-gradient font-serif text-sm font-bold text-white">
-            {personal.name.charAt(0)}
+            {personal?.name?.charAt(0) || ""}
           </span>
           <span className="hidden text-sm font-semibold tracking-tight text-ink sm:block">
             {personal.name}

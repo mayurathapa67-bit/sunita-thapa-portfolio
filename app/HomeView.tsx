@@ -25,25 +25,97 @@ import type {
   Stat,
 } from "@/lib/types";
 
-export default function HomeView() {
-  const { data: personal } = useJson<PersonalInfo>("/api/content/personal");
-  const { data: nav } = useJson<Nav>("/api/content/nav");
-  const { data: hero } = useJson<HeroType>("/api/content/hero");
-  const { data: about } = useJson<About>("/api/content/about");
-  const { data: services } = useJson<Service[]>("/api/content/services");
-  const { data: portfolio } = useJson<WritingSample[]>("/api/content/portfolio");
-  const { data: blog } = useJson<BlogPost[]>("/api/content/blog");
-  const { data: stats } = useJson<Stat[]>("/api/content/stats");
-  const { data: testimonials } = useJson<Testimonial[]>("/api/content/testimonials");
-  const { data: contact } = useJson<ContactInfo>("/api/content/contact");
+const defaultPersonal: PersonalInfo = {
+  name: "Sunita Thapa",
+  profession: "SEO & Digital Marketing Specialist",
+  email: "",
+  phone: "",
+  location: "",
+  avatar: "",
+};
 
-  if (!personal || !nav || !hero || !about || !services || !portfolio || !blog || !stats || !testimonials || !contact) {
+const defaultNav: Nav = { logo: "Sunita Thapa", links: [] };
+
+const defaultHero: HeroType = {
+  title: "Sunita Thapa",
+  role: "SEO Specialist & Digital Marketing Strategist",
+  tagline: "",
+  cta_primary: { label: "Get in touch", href: "/contact" },
+  cta_secondary: { label: "View work", href: "/portfolio" },
+  image: "",
+};
+
+const defaultAbout: About = {
+  headline: "",
+  bio: "",
+  philosophy: "",
+  expertise: [],
+  experience: [],
+  certifications: [],
+  image: "",
+};
+
+const defaultContact: ContactInfo = {
+  heading: "Let's work together",
+  email: "",
+  phone: "",
+  location: "",
+  socials: { github: "", linkedin: "", twitter: "", instagram: "" },
+};
+
+function orDefault<T>(value: T | undefined | null, fallback: T): T {
+  if (value === undefined || value === null) return fallback;
+  if (
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    Object.keys(value as object).length === 0
+  ) {
+    return fallback;
+  }
+  return value;
+}
+
+export default function HomeView() {
+  const { data: personalRaw } = useJson<PersonalInfo>("/api/content/personal");
+  const { data: navRaw } = useJson<Nav>("/api/content/nav");
+  const { data: heroRaw } = useJson<HeroType>("/api/content/hero");
+  const { data: aboutRaw } = useJson<About>("/api/content/about");
+  const { data: servicesRaw } = useJson<Service[]>("/api/content/services");
+  const { data: portfolioRaw } = useJson<WritingSample[]>("/api/content/portfolio");
+  const { data: blogRaw } = useJson<BlogPost[]>("/api/content/blog");
+  const { data: statsRaw } = useJson<Stat[]>("/api/content/stats");
+  const { data: testimonialsRaw } = useJson<Testimonial[]>("/api/content/testimonials");
+  const { data: contactRaw } = useJson<ContactInfo>("/api/content/contact");
+
+  if (
+    !personalRaw ||
+    !navRaw ||
+    !heroRaw ||
+    !aboutRaw ||
+    !servicesRaw ||
+    !portfolioRaw ||
+    !blogRaw ||
+    !statsRaw ||
+    !testimonialsRaw ||
+    !contactRaw
+  ) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-cream">
         <span className="h-8 w-8 animate-pulse rounded-full bg-primary/30" />
       </div>
     );
   }
+
+  const personal = orDefault(personalRaw, defaultPersonal);
+  const nav = orDefault(navRaw, defaultNav);
+  const hero = orDefault(heroRaw, defaultHero);
+  const about = orDefault(aboutRaw, defaultAbout);
+  const services = servicesRaw ?? [];
+  const portfolio = portfolioRaw ?? [];
+  const blog = blogRaw ?? [];
+  const stats = statsRaw ?? [];
+  const testimonials = testimonialsRaw ?? [];
+  const contact = orDefault(contactRaw, defaultContact);
 
   const featured = portfolio.filter((p) => p.featured).concat(portfolio.filter((p) => !p.featured)).slice(0, 4);
 

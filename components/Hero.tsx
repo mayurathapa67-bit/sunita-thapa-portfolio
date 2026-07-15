@@ -29,13 +29,13 @@ export default function Hero({
   hero: HeroType;
   personal: PersonalInfo;
 }) {
-  const image = imageSrc(hero.image) || imageSrc(personal.avatar);
+  const image = imageSrc(hero?.image) || imageSrc(personal?.avatar);
 
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, 140]);
   const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
-  const words = hero.title.split(" ");
+  const words = (hero?.title ?? "Sunita Thapa").split(" ");
   const accentIdx = Math.floor(words.length / 2);
 
   return (
