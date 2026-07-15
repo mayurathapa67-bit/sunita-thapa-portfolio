@@ -3,11 +3,14 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Search, X } from "lucide-react";
-import { useJson } from "@/lib/hooks";
+import { useContent } from "@/components/ContentProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WritingSampleCard from "@/components/WritingSampleCard";
 import SectionHeading from "@/components/SectionHeading";
+import SectionErrorBoundary from "@/components/SectionErrorBoundary";
+import { orDefault, defaultPersonal, defaultNav, defaultContact } from "@/lib/contentFallbacks";
+import { cn } from "@/lib/utils";
 import type {
   PersonalInfo,
   Nav,
@@ -15,7 +18,6 @@ import type {
   WritingCategory,
   ContactInfo,
 } from "@/lib/types";
-import { cn } from "@/lib/utils";
 
 const CATEGORIES: ("All" | WritingCategory)[] = [
   "All",
@@ -26,18 +28,14 @@ const CATEGORIES: ("All" | WritingCategory)[] = [
 ];
 
 export default function PortfolioView() {
-  const { data: personal } = useJson<PersonalInfo>("/api/content/personal");
-  const { data: nav } = useJson<Nav>("/api/content/nav");
-  const { data: portfolio } = useJson<WritingSample[]>("/api/content/portfolio");
-  const { data: contact } = useJson<ContactInfo>("/api/content/contact");
-
+  const content = useContent();
   const [category, setCategory] = useState<"All" | WritingCategory>("All");
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
-    if (!portfolio) return [];
+    const items = Array.isArray(content?.portfolio) ? content.portfolio : [];
     const q = query.toLowerCase().trim();
-    return portfolio.filter((s) => {
+    return items.filter((s) => {
       const matchCat = category === "All" || s.category === category;
       const matchQuery =
         !q ||
@@ -46,15 +44,19 @@ export default function PortfolioView() {
         (s.client ?? "").toLowerCase().includes(q);
       return matchCat && matchQuery;
     });
-  }, [portfolio, category, query]);
+  }, [content, category, query]);
 
-  if (!personal || !nav || !portfolio || !contact) {
+  if (!content) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-cream">
         <span className="h-8 w-8 animate-pulse rounded-full bg-primary/30" />
       </div>
     );
   }
+
+  const personal = orDefault(content.personal, defaultPersonal);
+  const nav = orDefault(content.nav, defaultNav);
+  const contact = orDefault(content.contact, defaultContact);
 
   return (
     <main className="min-h-screen bg-cream pt-24">
@@ -106,17 +108,19 @@ export default function PortfolioView() {
             </div>
           </div>
 
-          {filtered.length > 0 ? (
-            <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((sample, i) => (
-                <WritingSampleCard key={sample.id} sample={sample} idx={i} />
-              ))}
-            </motion.div>
-          ) : (
-            <p className="py-20 text-center text-muted">
-              No writing samples match your filters.
-            </p>
-          )}
+          <SectionErrorBoundary label="portfolio">
+            {filtered.length > 0 ? (
+              <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {filtered.map((sample, i) => (
+                  <WritingSampleCard key={sample.id} sample={sample} idx={i} />
+                ))}
+              </motion.div>
+            ) : (
+              <p className="py-20 text-center text-muted">
+                No writing samples match your filters.
+              </p>
+            )}
+          </SectionErrorBoundary>
         </div>
       </section>
 

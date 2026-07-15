@@ -1,26 +1,18 @@
 "use client";
 
-import { useJson } from "@/lib/hooks";
+import { useContent } from "@/components/ContentProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AboutSection from "@/components/AboutSection";
 import Experience from "@/components/Experience";
-import type {
-  PersonalInfo,
-  Nav,
-  About,
-  ExperienceItem,
-  ContactInfo,
-} from "@/lib/types";
+import SectionErrorBoundary from "@/components/SectionErrorBoundary";
+import { orDefault, defaultPersonal, defaultNav, defaultAbout, defaultContact } from "@/lib/contentFallbacks";
+import type { PersonalInfo, Nav, About, ExperienceItem, ContactInfo } from "@/lib/types";
 
 export default function AboutView() {
-  const { data: personal } = useJson<PersonalInfo>("/api/content/personal");
-  const { data: nav } = useJson<Nav>("/api/content/nav");
-  const { data: about } = useJson<About>("/api/content/about");
-  const { data: experience } = useJson<ExperienceItem[]>("/api/content/experience");
-  const { data: contact } = useJson<ContactInfo>("/api/content/contact");
+  const content = useContent();
 
-  if (!personal || !nav || !about || !experience || !contact) {
+  if (!content) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-cream">
         <span className="h-8 w-8 animate-pulse rounded-full bg-primary/30" />
@@ -28,11 +20,21 @@ export default function AboutView() {
     );
   }
 
+  const personal = orDefault(content.personal, defaultPersonal);
+  const nav = orDefault(content.nav, defaultNav);
+  const about = orDefault(content.about, defaultAbout);
+  const experience = Array.isArray(content.experience) ? content.experience : [];
+  const contact = orDefault(content.contact, defaultContact);
+
   return (
     <main className="min-h-screen bg-cream pt-24">
       <Navbar personal={personal} links={nav.links} />
-      <AboutSection about={about} personal={personal} />
-      <Experience experience={experience} />
+      <SectionErrorBoundary label="about">
+        <AboutSection about={about} personal={personal} />
+      </SectionErrorBoundary>
+      <SectionErrorBoundary label="experience">
+        <Experience experience={experience} />
+      </SectionErrorBoundary>
       <Footer contact={contact} />
     </main>
   );

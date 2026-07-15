@@ -1,18 +1,17 @@
 "use client";
 
-import { useJson } from "@/lib/hooks";
+import { useContent } from "@/components/ContentProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Experience from "@/components/Experience";
+import SectionErrorBoundary from "@/components/SectionErrorBoundary";
+import { orDefault, defaultPersonal, defaultNav, defaultContact } from "@/lib/contentFallbacks";
 import type { PersonalInfo, Nav, ExperienceItem, ContactInfo } from "@/lib/types";
 
 export default function ExperienceView() {
-  const { data: personal } = useJson<PersonalInfo>("/api/content/personal");
-  const { data: nav } = useJson<Nav>("/api/content/nav");
-  const { data: experience } = useJson<ExperienceItem[]>("/api/content/experience");
-  const { data: contact } = useJson<ContactInfo>("/api/content/contact");
+  const content = useContent();
 
-  if (!personal || !nav || !experience || !contact) {
+  if (!content) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-cream">
         <span className="h-8 w-8 animate-pulse rounded-full bg-primary/30" />
@@ -20,10 +19,17 @@ export default function ExperienceView() {
     );
   }
 
+  const personal = orDefault(content.personal, defaultPersonal);
+  const nav = orDefault(content.nav, defaultNav);
+  const experience = Array.isArray(content.experience) ? content.experience : [];
+  const contact = orDefault(content.contact, defaultContact);
+
   return (
     <main className="min-h-screen bg-cream pt-24">
       <Navbar personal={personal} links={nav.links} />
-      <Experience experience={experience} />
+      <SectionErrorBoundary label="experience">
+        <Experience experience={experience} />
+      </SectionErrorBoundary>
       <Footer contact={contact} />
     </main>
   );

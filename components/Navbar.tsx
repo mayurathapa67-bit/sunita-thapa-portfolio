@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { PersonalInfo, NavLink } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import Magnetic from "./Magnetic";
+import { useContent } from "./ContentProvider";
 
 export default function Navbar({
   personal,
@@ -17,15 +18,22 @@ export default function Navbar({
 }) {
   const [open, setOpen] = useState(false);
 
-  const safeLinks = Array.isArray(links)
-    ? links
-    : [
-        { label: "Home", href: "/" },
-        { label: "About", href: "/about" },
-        { label: "Services", href: "/services" },
-        { label: "Projects", href: "/projects" },
-        { label: "Contact", href: "/contact" },
-      ];
+  const ctx = useContent();
+  const fallbackLinks: NavLink[] = [
+    { label: "Home", href: "/" },
+    { label: "About", href: "/about" },
+    { label: "Portfolio", href: "/portfolio" },
+    { label: "Services", href: "/services" },
+    { label: "Blog", href: "/blog" },
+    { label: "Contact", href: "/contact" },
+  ];
+
+  const safeLinks =
+    Array.isArray(links) && links.length > 0
+      ? links
+      : Array.isArray(ctx?.nav?.links) && ctx.nav.links.length > 0
+      ? ctx.nav.links
+      : fallbackLinks;
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-4 z-50 flex justify-center px-4">

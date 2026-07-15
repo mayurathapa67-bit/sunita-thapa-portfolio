@@ -1,17 +1,17 @@
 "use client";
 
-import { useJson } from "@/lib/hooks";
+import { useContent } from "@/components/ContentProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ContactSection from "@/components/ContactSection";
+import SectionErrorBoundary from "@/components/SectionErrorBoundary";
+import { orDefault, defaultPersonal, defaultNav, defaultContact } from "@/lib/contentFallbacks";
 import type { PersonalInfo, Nav, ContactInfo } from "@/lib/types";
 
 export default function ContactView() {
-  const { data: personal } = useJson<PersonalInfo>("/api/content/personal");
-  const { data: nav } = useJson<Nav>("/api/content/nav");
-  const { data: contact } = useJson<ContactInfo>("/api/content/contact");
+  const content = useContent();
 
-  if (!personal || !nav || !contact) {
+  if (!content) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-cream">
         <span className="h-8 w-8 animate-pulse rounded-full bg-primary/30" />
@@ -19,10 +19,16 @@ export default function ContactView() {
     );
   }
 
+  const personal = orDefault(content.personal, defaultPersonal);
+  const nav = orDefault(content.nav, defaultNav);
+  const contact = orDefault(content.contact, defaultContact);
+
   return (
     <main className="min-h-screen bg-cream pt-24">
       <Navbar personal={personal} links={nav.links} />
-      <ContactSection contact={contact} />
+      <SectionErrorBoundary label="contact">
+        <ContactSection contact={contact} />
+      </SectionErrorBoundary>
       <Footer contact={contact} />
     </main>
   );

@@ -1,11 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useJson } from "@/lib/hooks";
+import { useContent } from "@/components/ContentProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ServicesGrid from "@/components/ServicesGrid";
 import SectionHeading from "@/components/SectionHeading";
+import SectionErrorBoundary from "@/components/SectionErrorBoundary";
+import { orDefault, defaultPersonal, defaultNav, defaultContact } from "@/lib/contentFallbacks";
 import type { PersonalInfo, Nav, Service, ContactInfo } from "@/lib/types";
 
 const PROCESS = [
@@ -16,18 +18,20 @@ const PROCESS = [
 ];
 
 export default function ServicesView() {
-  const { data: personal } = useJson<PersonalInfo>("/api/content/personal");
-  const { data: nav } = useJson<Nav>("/api/content/nav");
-  const { data: services } = useJson<Service[]>("/api/content/services");
-  const { data: contact } = useJson<ContactInfo>("/api/content/contact");
+  const content = useContent();
 
-  if (!personal || !nav || !services || !contact) {
+  if (!content) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-cream">
         <span className="h-8 w-8 animate-pulse rounded-full bg-primary/30" />
       </div>
     );
   }
+
+  const personal = orDefault(content.personal, defaultPersonal);
+  const nav = orDefault(content.nav, defaultNav);
+  const services = Array.isArray(content.services) ? content.services : [];
+  const contact = orDefault(content.contact, defaultContact);
 
   return (
     <main className="min-h-screen bg-cream pt-24">
@@ -44,7 +48,9 @@ export default function ServicesView() {
             }
             subtitle="Flexible engagements for brands that care about the words."
           />
-          <ServicesGrid services={services} />
+          <SectionErrorBoundary label="services">
+            <ServicesGrid services={services} />
+          </SectionErrorBoundary>
         </div>
       </section>
 

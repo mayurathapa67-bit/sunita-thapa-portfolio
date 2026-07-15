@@ -103,48 +103,44 @@ export default function AdminContentPage() {
     setToast(null);
 
     try {
-      if (mode === "publish") {
-        const res = await fetch("/api/content", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-        const body = await res.json();
-        if (body.success) {
-          setDrafts(new Set());
-          setToast({
-            type: "success",
-            msg: "✅ Published! Changes committed to GitHub. Vercel will redeploy in 1-2 minutes.",
-          });
-        } else {
-          setToast({
-            type: "error",
-            msg: `❌ Publish failed: ${body.error || body.details || "Unknown error"}`,
-          });
-        }
-      } else {
+      if (mode === "draft") {
         const res = await fetch(`/api/content/${active}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             password: apiPassword,
             data: (data as unknown as Record<string, unknown>)[active],
-            publishMode: mode,
+            publishMode: "draft",
           }),
         });
         if (res.ok) {
+          setDrafts((prev) => new Set(prev).add(active));
+          setToast({ type: "success", msg: "Draft saved locally" });
+        } else {
+          setToast({ type: "error", msg: "Save failed: unauthorized" });
+        }
+      } else {
+        const res = await fetch("/api/content", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const body = await res.json();
+        if (body.success || res.ok) {
           setDrafts((prev) => {
             const next = new Set(prev);
-            if (mode === "draft") next.add(active);
-            else next.delete(active);
+            next.delete(active);
             return next;
           });
           setToast({
             type: "success",
-            msg: mode === "draft" ? "Draft saved locally" : "Saved to local db.json ✅",
+            msg: "✅ Saved! Changes committed to GitHub. Vercel will redeploy in 1-2 minutes.",
           });
         } else {
-          setToast({ type: "error", msg: "Save failed: unauthorized" });
+          setToast({
+            type: "error",
+            msg: `❌ Save failed: ${body.error || body.details || "Unknown error"}`,
+          });
         }
       }
     } catch {

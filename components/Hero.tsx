@@ -31,6 +31,13 @@ export default function Hero({
 }) {
   const image = imageSrc(hero?.image) || imageSrc(personal?.avatar);
 
+  const role = hero?.role ?? "";
+  const tagline = hero?.tagline ?? "";
+  const ctaPrimary =
+    hero?.cta_primary ?? { label: "Get in touch", href: "/contact" };
+  const ctaSecondary =
+    hero?.cta_secondary ?? { label: "View work", href: "/portfolio" };
+
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], [0, 140]);
   const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
@@ -62,7 +69,7 @@ export default function Hero({
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
               </span>
-              {hero.role}
+              {role}
             </motion.div>
 
             <motion.h1
@@ -86,7 +93,7 @@ export default function Hero({
               transition={{ delay: 0.5, duration: 0.7 }}
               className="mt-7 max-w-xl text-lg leading-relaxed text-muted"
             >
-              {hero.tagline}
+              {tagline}
             </motion.p>
 
             <motion.div
@@ -96,14 +103,14 @@ export default function Hero({
               className="mt-10 flex flex-wrap items-center gap-4"
             >
               <Magnetic strength={0.4}>
-                <a href={hero.cta_primary.href} className="btn-primary group">
-                  {hero.cta_primary.label}
+                <a href={ctaPrimary.href} className="btn-primary group">
+                  {ctaPrimary.label}
                   <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
                 </a>
               </Magnetic>
               <Magnetic strength={0.4}>
-                <a href={hero.cta_secondary.href} className="btn-ghost">
-                  <Sparkles size={16} /> {hero.cta_secondary.label}
+                <a href={ctaSecondary.href} className="btn-ghost">
+                  <Sparkles size={16} /> {ctaSecondary.label}
                 </a>
               </Magnetic>
             </motion.div>

@@ -1,6 +1,5 @@
 "use client";
 
-import { useJson } from "@/lib/hooks";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
@@ -12,6 +11,8 @@ import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import BlogPreview from "@/components/BlogPreview";
 import StatsSection from "@/components/StatsSection";
 import SectionHeading from "@/components/SectionHeading";
+import SectionErrorBoundary from "@/components/SectionErrorBoundary";
+import { useContent } from "@/components/ContentProvider";
 import type {
   PersonalInfo,
   Nav,
@@ -76,29 +77,9 @@ function orDefault<T>(value: T | undefined | null, fallback: T): T {
 }
 
 export default function HomeView() {
-  const { data: personalRaw } = useJson<PersonalInfo>("/api/content/personal");
-  const { data: navRaw } = useJson<Nav>("/api/content/nav");
-  const { data: heroRaw } = useJson<HeroType>("/api/content/hero");
-  const { data: aboutRaw } = useJson<About>("/api/content/about");
-  const { data: servicesRaw } = useJson<Service[]>("/api/content/services");
-  const { data: portfolioRaw } = useJson<WritingSample[]>("/api/content/portfolio");
-  const { data: blogRaw } = useJson<BlogPost[]>("/api/content/blog");
-  const { data: statsRaw } = useJson<Stat[]>("/api/content/stats");
-  const { data: testimonialsRaw } = useJson<Testimonial[]>("/api/content/testimonials");
-  const { data: contactRaw } = useJson<ContactInfo>("/api/content/contact");
+  const content = useContent();
 
-  if (
-    !personalRaw ||
-    !navRaw ||
-    !heroRaw ||
-    !aboutRaw ||
-    !servicesRaw ||
-    !portfolioRaw ||
-    !blogRaw ||
-    !statsRaw ||
-    !testimonialsRaw ||
-    !contactRaw
-  ) {
+  if (!content) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-cream">
         <span className="h-8 w-8 animate-pulse rounded-full bg-primary/30" />
@@ -106,57 +87,78 @@ export default function HomeView() {
     );
   }
 
-  const personal = orDefault(personalRaw, defaultPersonal);
-  const nav = orDefault(navRaw, defaultNav);
-  const hero = orDefault(heroRaw, defaultHero);
-  const about = orDefault(aboutRaw, defaultAbout);
-  const services = servicesRaw ?? [];
-  const portfolio = portfolioRaw ?? [];
-  const blog = blogRaw ?? [];
-  const stats = statsRaw ?? [];
-  const testimonials = testimonialsRaw ?? [];
-  const contact = orDefault(contactRaw, defaultContact);
+  const personal = orDefault(content.personal, defaultPersonal);
+  const nav = orDefault(content.nav, defaultNav);
+  const hero = orDefault(content.hero, defaultHero);
+  const about = orDefault(content.about, defaultAbout);
+  const services = Array.isArray(content.services) ? content.services : [];
+  const portfolio = Array.isArray(content.portfolio) ? content.portfolio : [];
+  const blog = Array.isArray(content.blog) ? content.blog : [];
+  const stats = Array.isArray(content.stats) ? content.stats : [];
+  const testimonials = Array.isArray(content.testimonials)
+    ? content.testimonials
+    : [];
+  const contact = orDefault(content.contact, defaultContact);
 
-  const featured = portfolio.filter((p) => p.featured).concat(portfolio.filter((p) => !p.featured)).slice(0, 4);
+  const featured = portfolio
+    .filter((p) => p.featured)
+    .concat(portfolio.filter((p) => !p.featured))
+    .slice(0, 4);
 
   return (
     <main className="min-h-screen bg-cream">
       <Navbar personal={personal} links={nav.links} />
-      <Hero hero={hero} personal={personal} />
-      <TypographyShowcase />
-      <AboutSection about={about} personal={personal} />
-      <StatsSection stats={stats} />
+      <SectionErrorBoundary label="hero">
+        <Hero hero={hero} personal={personal} />
+      </SectionErrorBoundary>
+      <SectionErrorBoundary label="typography">
+        <TypographyShowcase />
+      </SectionErrorBoundary>
+      <SectionErrorBoundary label="about">
+        <AboutSection about={about} personal={personal} />
+      </SectionErrorBoundary>
+      <SectionErrorBoundary label="stats">
+        <StatsSection stats={stats} />
+      </SectionErrorBoundary>
 
-      <section id="writing" className="section-pad bg-surface-strong">
-        <div className="container-px">
-          <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
-            <SectionHeading
-              align="left"
-              eyebrow="Selected Writing"
-              title={
-                <>
-                  Words that do the <span className="serif-accent">work</span>
-                </>
-              }
-            />
-            <a
-              href="/portfolio"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:gap-2.5"
-            >
-              View all samples <span aria-hidden>→</span>
-            </a>
+      <SectionErrorBoundary label="writing">
+        <section id="writing" className="section-pad bg-surface-strong">
+          <div className="container-px">
+            <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
+              <SectionHeading
+                align="left"
+                eyebrow="Selected Writing"
+                title={
+                  <>
+                    Words that do the <span className="serif-accent">work</span>
+                  </>
+                }
+              />
+              <a
+                href="/portfolio"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:gap-2.5"
+              >
+                View all samples <span aria-hidden>→</span>
+              </a>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {featured.map((sample, i) => (
+                <WritingSampleCard key={sample.id} sample={sample} idx={i} />
+              ))}
+            </div>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((sample, i) => (
-              <WritingSampleCard key={sample.id} sample={sample} idx={i} />
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      </SectionErrorBoundary>
 
-      <ServicesGrid services={services} />
-      <TestimonialsCarousel testimonials={testimonials} />
-      <BlogPreview posts={blog} />
+      <SectionErrorBoundary label="services">
+        <ServicesGrid services={services} />
+      </SectionErrorBoundary>
+      <SectionErrorBoundary label="testimonials">
+        <TestimonialsCarousel testimonials={testimonials} />
+      </SectionErrorBoundary>
+      <SectionErrorBoundary label="blog">
+        <BlogPreview posts={blog} />
+      </SectionErrorBoundary>
 
       <section className="section-pad bg-cream">
         <div className="container-px">

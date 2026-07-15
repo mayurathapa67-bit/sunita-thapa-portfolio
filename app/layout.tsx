@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { MotionConfig } from "framer-motion";
+import { ContentProvider } from "@/components/ContentProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -60,7 +61,9 @@ export default function RootLayout({
       suppressHydrationWarning={true}
     >
       <body className="bg-background text-ink antialiased" suppressHydrationWarning={true}>
-        <MotionConfig reducedMotion="user">{children}</MotionConfig>
+        <ContentProvider>
+          <MotionConfig reducedMotion="user">{children}</MotionConfig>
+        </ContentProvider>
       </body>
     </html>
   );

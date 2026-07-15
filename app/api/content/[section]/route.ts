@@ -32,13 +32,54 @@ export async function GET(
     return NextResponse.json({ error: "Invalid section" }, { status: 400 });
   }
   try {
-    const db = await readDB();
-    return NextResponse.json(db[section], {
+    const token = process.env.GITHUB_TOKEN;
+    const repo = process.env.GITHUB_REPO;
+    const branch = process.env.GITHUB_BRANCH || "main";
+
+    if (!token || !repo) {
+      console.error("[content/section] GitHub credentials missing");
+      return NextResponse.json(
+        { error: "GitHub credentials not configured" },
+        { status: 500 }
+      );
+    }
+
+    const url = `https://api.github.com/repos/${repo}/contents/content.json?ref=${branch}`;
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `token ${token}`,
+        Accept: "application/vnd.github.v3+json",
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      console.error("[content/section] GitHub fetch failed:", response.status);
+      return NextResponse.json(
+        {},
+        {
+          status: 200,
+          headers: { "Cache-Control": "no-store, max-age=0" },
+        }
+      );
+    }
+
+    const file = await response.json();
+    const content = Buffer.from(file.content, "base64").toString("utf-8");
+    const db = JSON.parse(content) as PortfolioData;
+
+    return NextResponse.json(db[section] ?? {}, {
       headers: { "Cache-Control": "no-store, max-age=0" },
     });
   } catch (err) {
     console.error("[content/section] GET failed:", err);
-    return NextResponse.json({}, { status: 200 });
+    return NextResponse.json(
+      {},
+      {
+        status: 200,
+        headers: { "Cache-Control": "no-store, max-age=0" },
+      }
+    );
   }
 }
 
