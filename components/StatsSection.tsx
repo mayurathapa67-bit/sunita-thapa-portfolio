@@ -52,7 +52,8 @@ function Counter({ value, suffix }: { value: number; suffix?: string }) {
 }
 
 export default function StatsSection({ stats }: { stats: Stat[] }) {
-  if (!stats || stats.length === 0) return null;
+  const safeStats = Array.isArray(stats) ? stats : [];
+  if (safeStats.length === 0) return null;
 
   return (
     <section className="section-pad bg-cream">
@@ -68,7 +69,7 @@ export default function StatsSection({ stats }: { stats: Stat[] }) {
         />
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat, i) => {
+          {safeStats.map((stat, i) => {
             const Icon = stat.icon ? ICONS[stat.icon] ?? BarChart3 : BarChart3;
             return (
               <motion.div

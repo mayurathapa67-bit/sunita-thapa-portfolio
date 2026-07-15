@@ -3,7 +3,12 @@ import type { ContactInfo } from "@/lib/types";
 
 export default function Footer({ contact }: { contact: ContactInfo }) {
   const year = new Date().getFullYear();
-  const socials = contact.socials;
+  const socials = contact.socials ?? {
+    github: "",
+    linkedin: "",
+    twitter: "",
+    instagram: "",
+  };
 
   const items = [
     { icon: Github, href: socials.github, label: "GitHub" },
