@@ -1,6 +1,6 @@
 {
   "personal": {
-    "name": "Sunita Thapa",
+    "name": "Sunita Thapa Mager",
     "profession": "SEO Specialist & Digital Marketing Specialist",
     "email": "hello@sunitathapa.com",
     "phone": "+977 9800000000",
@@ -10,20 +10,44 @@
   "nav": {
     "logo": "Sunita Thapa",
     "links": [
-      { "label": "Home", "href": "/" },
-      { "label": "About", "href": "/about" },
-      { "label": "Portfolio", "href": "/portfolio" },
-      { "label": "Services", "href": "/services" },
-      { "label": "Blog", "href": "/blog" },
-      { "label": "Contact", "href": "/contact" }
+      {
+        "label": "Home",
+        "href": "/"
+      },
+      {
+        "label": "About",
+        "href": "/about"
+      },
+      {
+        "label": "Portfolio",
+        "href": "/portfolio"
+      },
+      {
+        "label": "Services",
+        "href": "/services"
+      },
+      {
+        "label": "Blog",
+        "href": "/blog"
+      },
+      {
+        "label": "Contact",
+        "href": "/contact"
+      }
     ]
   },
   "hero": {
     "title": "Sunita Thapa",
     "role": "SEO Specialist & Digital Marketing Specialist",
     "tagline": "Data-driven SEO and digital marketing that grows organic traffic, boosts rankings and turns search intent into measurable revenue.",
-    "cta_primary": { "label": "View My Work", "href": "/portfolio" },
-    "cta_secondary": { "label": "Let's Talk", "href": "/contact" },
+    "cta_primary": {
+      "label": "View My Work",
+      "href": "/portfolio"
+    },
+    "cta_secondary": {
+      "label": "Let's Talk",
+      "href": "/contact"
+    },
     "image": "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1200&q=80"
   },
   "about": {
@@ -31,15 +55,49 @@
     "bio": "I'm Sunita Thapa, an SEO Specialist and Digital Marketing Specialist based in Nepal. Over the last six years I've helped startups, local businesses and growing brands climb the search rankings and build marketing engines that actually convert. From technical SEO audits to full-funnel PPC and content strategy, my work is grounded in data, sharpened by testing, and measured by results.",
     "philosophy": "Good marketing isn't noise â€” it's relevance. I start with the searcher's intent, build the strategy around real data, and let results prove the approach. Trust and consistency are what turn traffic into customers.",
     "expertise": [
-      { "id": 1, "title": "Technical SEO", "description": "Site audits, crawl optimisation, schema and Core Web Vitals that lift rankings from the foundation up." },
-      { "id": 2, "title": "Content & Keyword Strategy", "description": "Topic clusters and intent-led content that earns rankings and keeps readers on the page." },
-      { "id": 3, "title": "Paid Search (PPC)", "description": "Google Ads campaigns engineered for a healthy ROAS, not just clicks." },
-      { "id": 4, "title": "Analytics & CRO", "description": "Tracking, dashboards and conversion-rate optimisation that turn traffic into revenue." }
+      {
+        "id": 1,
+        "title": "Technical SEO",
+        "description": "Site audits, crawl optimisation, schema and Core Web Vitals that lift rankings from the foundation up."
+      },
+      {
+        "id": 2,
+        "title": "Content & Keyword Strategy",
+        "description": "Topic clusters and intent-led content that earns rankings and keeps readers on the page."
+      },
+      {
+        "id": 3,
+        "title": "Paid Search (PPC)",
+        "description": "Google Ads campaigns engineered for a healthy ROAS, not just clicks."
+      },
+      {
+        "id": 4,
+        "title": "Analytics & CRO",
+        "description": "Tracking, dashboards and conversion-rate optimisation that turn traffic into revenue."
+      }
     ],
     "experience": [
-      { "id": 1, "company": "Himalayan Digital", "position": "Senior SEO Specialist", "duration": "2022 â€” Present", "description": "Lead technical SEO and content strategy for e-commerce and SaaS clients across South Asia." },
-      { "id": 2, "company": "Everest Growth Co.", "position": "Digital Marketing Executive", "duration": "2020 â€” 2022", "description": "Ran paid and organic campaigns that doubled qualified leads for 30+ brands." },
-      { "id": 3, "company": "Kathmandu Media", "position": "SEO Content Analyst", "duration": "2018 â€” 2020", "description": "Built content operations and keyword systems for a national publishing network." }
+      {
+        "id": 1,
+        "company": "Himalayan Digital",
+        "position": "Senior SEO Specialist",
+        "duration": "2022 â€” Present",
+        "description": "Lead technical SEO and content strategy for e-commerce and SaaS clients across South Asia."
+      },
+      {
+        "id": 2,
+        "company": "Everest Growth Co.",
+        "position": "Digital Marketing Executive",
+        "duration": "2020 â€” 2022",
+        "description": "Ran paid and organic campaigns that doubled qualified leads for 30+ brands."
+      },
+      {
+        "id": 3,
+        "company": "Kathmandu Media",
+        "position": "SEO Content Analyst",
+        "duration": "2018 â€” 2020",
+        "description": "Built content operations and keyword systems for a national publishing network."
+      }
     ],
     "certifications": [
       "Google Analytics 4 Certification",
@@ -50,44 +108,309 @@
     "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80"
   },
   "services": [
-    { "id": 1, "title": "SEO Audit & Strategy", "description": "A full technical and content audit with a prioritised roadmap that fixes what's holding your rankings back.", "icon": "Search", "price": "from $400/project", "features": ["Technical site audit", "Keyword & gap analysis", "Backlink review", "90-day action plan"] },
-    { "id": 2, "title": "On-Page & Technical SEO", "description": "Crawlability, Core Web Vitals, schema and internal linking â€” the foundation every ranking is built on.", "icon": "Compass", "price": "from $300/mo", "features": ["Core Web Vitals fixes", "Schema & structured data", "Internal linking", "Indexation hygiene"] },
-    { "id": 3, "title": "Content Marketing", "description": "Intent-led content calendars and articles that rank, earn links and keep readers engaged.", "icon": "PenLine", "price": "from $0.10/word", "features": ["Topic cluster planning", "SEO article writing", "Content refresh", "Editorial calendar"] },
-    { "id": 4, "title": "PPC & Google Ads", "description": "Campaigns built around profitable keywords and tight tracking so every rupee is accountable.", "icon": "Target", "price": "from $250/mo", "features": ["Search & Shopping ads", "Conversion tracking", "A/B ad testing", "Bid optimisation"] },
-    { "id": 5, "title": "Social Media Marketing", "description": "Scroll-stopping content and paid social that grow communities and start conversations.", "icon": "Megaphone", "price": "from $250/mo", "features": ["Content pillars", "Paid social", "Community management", "Monthly reporting"] },
-    { "id": 6, "title": "Email & Automation", "description": "Welcome flows and newsletters that nurture subscribers into loyal, repeat customers.", "icon": "Mail", "price": "from $12/email", "features": ["Welcome sequences", "Newsletters", "Segmentation", "Performance testing"] }
+    {
+      "id": 1,
+      "title": "SEO Audit & Strategy",
+      "description": "A full technical and content audit with a prioritised roadmap that fixes what's holding your rankings back.",
+      "icon": "Search",
+      "price": "from $400/project",
+      "features": [
+        "Technical site audit",
+        "Keyword & gap analysis",
+        "Backlink review",
+        "90-day action plan"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "On-Page & Technical SEO",
+      "description": "Crawlability, Core Web Vitals, schema and internal linking â€” the foundation every ranking is built on.",
+      "icon": "Compass",
+      "price": "from $300/mo",
+      "features": [
+        "Core Web Vitals fixes",
+        "Schema & structured data",
+        "Internal linking",
+        "Indexation hygiene"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Content Marketing",
+      "description": "Intent-led content calendars and articles that rank, earn links and keep readers engaged.",
+      "icon": "PenLine",
+      "price": "from $0.10/word",
+      "features": [
+        "Topic cluster planning",
+        "SEO article writing",
+        "Content refresh",
+        "Editorial calendar"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "PPC & Google Ads",
+      "description": "Campaigns built around profitable keywords and tight tracking so every rupee is accountable.",
+      "icon": "Target",
+      "price": "from $250/mo",
+      "features": [
+        "Search & Shopping ads",
+        "Conversion tracking",
+        "A/B ad testing",
+        "Bid optimisation"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Social Media Marketing",
+      "description": "Scroll-stopping content and paid social that grow communities and start conversations.",
+      "icon": "Megaphone",
+      "price": "from $250/mo",
+      "features": [
+        "Content pillars",
+        "Paid social",
+        "Community management",
+        "Monthly reporting"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Email & Automation",
+      "description": "Welcome flows and newsletters that nurture subscribers into loyal, repeat customers.",
+      "icon": "Mail",
+      "price": "from $12/email",
+      "features": [
+        "Welcome sequences",
+        "Newsletters",
+        "Segmentation",
+        "Performance testing"
+      ]
+    }
   ],
   "portfolio": [
-    { "id": 1, "title": "3x Organic Traffic for a Kathmandu E-commerce Store", "category": "SEO Projects", "excerpt": "A technical overhaul and content cluster strategy that tripled organic sessions in eight months.", "content": "We started with a deep crawl audit, fixed indexation and Core Web Vitals issues, then built topic clusters around high-intent commercial keywords. Within eight months organic sessions tripled and non-brand rankings reached page one for 120+ money keywords.", "client": "Himalayan Digital", "published_date": "2025-11-02", "read_time": 6, "featured_image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80", "featured": true, "results": "+320% organic traffic" },
-    { "id": 2, "title": "Page-One Rankings for 120+ Local Keywords", "category": "SEO Projects", "excerpt": "A local SEO playbook that captured 'near me' searches for a multi-location brand.", "content": "We optimised Google Business Profiles, built local landing pages and earned consistent review velocity. The brand now ranks page one for 120+ local-intent keywords and saw a 4x lift in map-pack visibility.", "client": "Everest Growth Co.", "published_date": "2025-09-18", "read_time": 9, "featured_image": "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1000&q=80", "featured": true, "results": "120+ keywords on page 1" },
-    { "id": 3, "title": "5.2x ROAS from a Revamped Google Ads Account", "category": "PPC Campaigns", "excerpt": "Restructuring a messy Search account into a profit engine with tight tracking.", "content": "We rebuilt the account around profitable keyword themes, added offline conversion tracking and ran aggressive ad testing. ROAS climbed from 1.8x to 5.2x in a single quarter while CPA dropped 41%.", "client": "Northwind Retail", "published_date": "2025-08-05", "read_time": 7, "featured_image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80", "featured": false, "results": "5.2x ROAS" },
-    { "id": 4, "title": "Content Cluster That Earned 40+ Backlinks", "category": "Content Marketing", "excerpt": "A pillar-and-cluster content program that became the category reference.", "content": "We mapped the topic landscape, published a data-led pillar page and supported it with 18 cluster articles. The hub earned 40+ organic backlinks and now drives a steady stream of assisted conversions.", "client": "Lumen SaaS", "published_date": "2025-06-21", "read_time": 11, "featured_image": "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1000&q=80", "featured": false, "results": "40+ backlinks" },
-    { "id": 5, "title": "Social Launch That Grew a Community to 15k", "category": "Social Media", "excerpt": "A 90-day social content system that turned a quiet brand page into a community.", "content": "We defined content pillars, shipped a consistent posting cadence and layered paid social on top of organic. The community grew to 15k engaged followers and contributed 22% of total inbound leads.", "client": "Botanica Co.", "published_date": "2025-05-09", "read_time": 4, "featured_image": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1000&q=80", "featured": false, "results": "15k new followers" },
-    { "id": 6, "title": "Local SEO for a Chain of Wellness Clinics", "category": "SEO Projects", "excerpt": "Multi-location schema and review strategy that filled the appointment book.", "content": "We implemented location-specific landing pages, fixed NAP consistency and built a review-generation flow. Bookings from organic search rose 68% across all clinics within two quarters.", "client": "Wellness Nepal", "published_date": "2025-03-14", "read_time": 12, "featured_image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80", "featured": false, "results": "+68% bookings" },
-    { "id": 7, "title": "Shopping Campaigns That Cut Wasted Spend", "category": "PPC Campaigns", "excerpt": "Negative-keyword hygiene and feed optimisation that protected the budget.", "content": "We rebuilt the Shopping feed, added granular negatives and aligned bidding to margin. Wasted spend dropped 35% while revenue from paid shopping rose 28%.", "client": "Northwind Retail", "published_date": "2025-02-02", "read_time": 5, "featured_image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80", "featured": false, "results": "-35% wasted spend" },
-    { "id": 8, "title": "Email Welcome Flow That Lifted Repeat Sales", "category": "Content Marketing", "excerpt": "A five-touch welcome sequence that turned first-time buyers into regulars.", "content": "We designed a welcome flow built on behaviour triggers and clear CTAs. Repeat-purchase rate rose 24% in the first 60 days of launch.", "client": "Botanica Co.", "published_date": "2024-12-19", "read_time": 8, "featured_image": "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1000&q=80", "featured": false, "results": "+24% repeat sales" }
+    {
+      "id": 1,
+      "title": "3x Organic Traffic for a Kathmandu E-commerce Store",
+      "category": "SEO Projects",
+      "excerpt": "A technical overhaul and content cluster strategy that tripled organic sessions in eight months.",
+      "content": "We started with a deep crawl audit, fixed indexation and Core Web Vitals issues, then built topic clusters around high-intent commercial keywords. Within eight months organic sessions tripled and non-brand rankings reached page one for 120+ money keywords.",
+      "client": "Himalayan Digital",
+      "published_date": "2025-11-02",
+      "read_time": 6,
+      "featured_image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80",
+      "featured": true,
+      "results": "+320% organic traffic"
+    },
+    {
+      "id": 2,
+      "title": "Page-One Rankings for 120+ Local Keywords",
+      "category": "SEO Projects",
+      "excerpt": "A local SEO playbook that captured 'near me' searches for a multi-location brand.",
+      "content": "We optimised Google Business Profiles, built local landing pages and earned consistent review velocity. The brand now ranks page one for 120+ local-intent keywords and saw a 4x lift in map-pack visibility.",
+      "client": "Everest Growth Co.",
+      "published_date": "2025-09-18",
+      "read_time": 9,
+      "featured_image": "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1000&q=80",
+      "featured": true,
+      "results": "120+ keywords on page 1"
+    },
+    {
+      "id": 3,
+      "title": "5.2x ROAS from a Revamped Google Ads Account",
+      "category": "PPC Campaigns",
+      "excerpt": "Restructuring a messy Search account into a profit engine with tight tracking.",
+      "content": "We rebuilt the account around profitable keyword themes, added offline conversion tracking and ran aggressive ad testing. ROAS climbed from 1.8x to 5.2x in a single quarter while CPA dropped 41%.",
+      "client": "Northwind Retail",
+      "published_date": "2025-08-05",
+      "read_time": 7,
+      "featured_image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80",
+      "featured": false,
+      "results": "5.2x ROAS"
+    },
+    {
+      "id": 4,
+      "title": "Content Cluster That Earned 40+ Backlinks",
+      "category": "Content Marketing",
+      "excerpt": "A pillar-and-cluster content program that became the category reference.",
+      "content": "We mapped the topic landscape, published a data-led pillar page and supported it with 18 cluster articles. The hub earned 40+ organic backlinks and now drives a steady stream of assisted conversions.",
+      "client": "Lumen SaaS",
+      "published_date": "2025-06-21",
+      "read_time": 11,
+      "featured_image": "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1000&q=80",
+      "featured": false,
+      "results": "40+ backlinks"
+    },
+    {
+      "id": 5,
+      "title": "Social Launch That Grew a Community to 15k",
+      "category": "Social Media",
+      "excerpt": "A 90-day social content system that turned a quiet brand page into a community.",
+      "content": "We defined content pillars, shipped a consistent posting cadence and layered paid social on top of organic. The community grew to 15k engaged followers and contributed 22% of total inbound leads.",
+      "client": "Botanica Co.",
+      "published_date": "2025-05-09",
+      "read_time": 4,
+      "featured_image": "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1000&q=80",
+      "featured": false,
+      "results": "15k new followers"
+    },
+    {
+      "id": 6,
+      "title": "Local SEO for a Chain of Wellness Clinics",
+      "category": "SEO Projects",
+      "excerpt": "Multi-location schema and review strategy that filled the appointment book.",
+      "content": "We implemented location-specific landing pages, fixed NAP consistency and built a review-generation flow. Bookings from organic search rose 68% across all clinics within two quarters.",
+      "client": "Wellness Nepal",
+      "published_date": "2025-03-14",
+      "read_time": 12,
+      "featured_image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80",
+      "featured": false,
+      "results": "+68% bookings"
+    },
+    {
+      "id": 7,
+      "title": "Shopping Campaigns That Cut Wasted Spend",
+      "category": "PPC Campaigns",
+      "excerpt": "Negative-keyword hygiene and feed optimisation that protected the budget.",
+      "content": "We rebuilt the Shopping feed, added granular negatives and aligned bidding to margin. Wasted spend dropped 35% while revenue from paid shopping rose 28%.",
+      "client": "Northwind Retail",
+      "published_date": "2025-02-02",
+      "read_time": 5,
+      "featured_image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80",
+      "featured": false,
+      "results": "-35% wasted spend"
+    },
+    {
+      "id": 8,
+      "title": "Email Welcome Flow That Lifted Repeat Sales",
+      "category": "Content Marketing",
+      "excerpt": "A five-touch welcome sequence that turned first-time buyers into regulars.",
+      "content": "We designed a welcome flow built on behaviour triggers and clear CTAs. Repeat-purchase rate rose 24% in the first 60 days of launch.",
+      "client": "Botanica Co.",
+      "published_date": "2024-12-19",
+      "read_time": 8,
+      "featured_image": "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1000&q=80",
+      "featured": false,
+      "results": "+24% repeat sales"
+    }
   ],
   "blog": [
-    { "id": 1, "title": "Local SEO in Nepal: The 2026 Playbook", "excerpt": "A practical checklist for capturing 'near me' searches without a big agency budget.", "content": "Local search keeps evolving, but the fundamentals are stubbornly consistent. This guide walks through Google Business Profile optimisation, review velocity, schema markup and the content gaps most local sites leave wide open â€” with templates you can ship this week.", "published_date": "2025-12-01", "read_time": 5, "category": "SEO", "featured_image": "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1000&q=80" },
-    { "id": 2, "title": "The difference between good SEO and invisible SEO", "excerpt": "Rankings are the easy part. Keeping the reader is the craft.", "content": "Too many marketers stop at the keyword. The real SEO skill is retention â€” creating content people finish, share and link to. I break down the on-page signals that actually matter in 2026.", "published_date": "2025-10-15", "read_time": 7, "category": "SEO", "featured_image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80" },
-    { "id": 3, "title": "How to read a PPC account like a profit engine", "excerpt": "Stop optimising for clicks. Start optimising for the metric that pays the bills.", "content": "A short, opinionated take on restructuring Google Ads around profitable keywords and real conversion tracking â€” with three rewrites that lifted ROAS without raising the budget.", "published_date": "2025-07-28", "read_time": 4, "category": "PPC", "featured_image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80" }
+    {
+      "id": 1,
+      "title": "Local SEO in Nepal: The 2026 Playbook",
+      "excerpt": "A practical checklist for capturing 'near me' searches without a big agency budget.",
+      "content": "Local search keeps evolving, but the fundamentals are stubbornly consistent. This guide walks through Google Business Profile optimisation, review velocity, schema markup and the content gaps most local sites leave wide open â€” with templates you can ship this week.",
+      "published_date": "2025-12-01",
+      "read_time": 5,
+      "category": "SEO",
+      "featured_image": "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": 2,
+      "title": "The difference between good SEO and invisible SEO",
+      "excerpt": "Rankings are the easy part. Keeping the reader is the craft.",
+      "content": "Too many marketers stop at the keyword. The real SEO skill is retention â€” creating content people finish, share and link to. I break down the on-page signals that actually matter in 2026.",
+      "published_date": "2025-10-15",
+      "read_time": 7,
+      "category": "SEO",
+      "featured_image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80"
+    },
+    {
+      "id": 3,
+      "title": "How to read a PPC account like a profit engine",
+      "excerpt": "Stop optimising for clicks. Start optimising for the metric that pays the bills.",
+      "content": "A short, opinionated take on restructuring Google Ads around profitable keywords and real conversion tracking â€” with three rewrites that lifted ROAS without raising the budget.",
+      "published_date": "2025-07-28",
+      "read_time": 4,
+      "category": "PPC",
+      "featured_image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80"
+    }
   ],
   "stats": [
-    { "id": 1, "label": "Organic Traffic Growth", "value": 320, "suffix": "%", "icon": "TrendingUp" },
-    { "id": 2, "label": "Keywords on Page 1", "value": 450, "suffix": "+", "icon": "Search" },
-    { "id": 3, "label": "Average PPC ROAS", "value": 5.2, "suffix": "x", "icon": "Target" },
-    { "id": 4, "label": "Clients Served", "value": 60, "suffix": "+", "icon": "Users" }
+    {
+      "id": 1,
+      "label": "Organic Traffic Growth",
+      "value": 320,
+      "suffix": "%",
+      "icon": "TrendingUp"
+    },
+    {
+      "id": 2,
+      "label": "Keywords on Page 1",
+      "value": 450,
+      "suffix": "+",
+      "icon": "Search"
+    },
+    {
+      "id": 3,
+      "label": "Average PPC ROAS",
+      "value": 5.2,
+      "suffix": "x",
+      "icon": "Target"
+    },
+    {
+      "id": 4,
+      "label": "Clients Served",
+      "value": 60,
+      "suffix": "+",
+      "icon": "Users"
+    }
   ],
   "experience": [
-    { "id": 1, "company": "Himalayan Digital", "position": "Senior SEO Specialist", "duration": "2022 â€” Present", "description": "Lead technical SEO and content strategy for e-commerce and SaaS clients across South Asia." },
-    { "id": 2, "company": "Everest Growth Co.", "position": "Digital Marketing Executive", "duration": "2020 â€” 2022", "description": "Ran paid and organic campaigns that doubled qualified leads for 30+ brands." },
-    { "id": 3, "company": "Kathmandu Media", "position": "SEO Content Analyst", "duration": "2018 â€” 2020", "description": "Built content operations and keyword systems for a national publishing network." }
+    {
+      "id": 1,
+      "company": "Himalayan Digital",
+      "position": "Senior SEO Specialist",
+      "duration": "2022 â€” Present",
+      "description": "Lead technical SEO and content strategy for e-commerce and SaaS clients across South Asia."
+    },
+    {
+      "id": 2,
+      "company": "Everest Growth Co.",
+      "position": "Digital Marketing Executive",
+      "duration": "2020 â€” 2022",
+      "description": "Ran paid and organic campaigns that doubled qualified leads for 30+ brands."
+    },
+    {
+      "id": 3,
+      "company": "Kathmandu Media",
+      "position": "SEO Content Analyst",
+      "duration": "2018 â€” 2020",
+      "description": "Built content operations and keyword systems for a national publishing network."
+    }
   ],
   "testimonials": [
-    { "id": 1, "quote": "Sunita rebuilt our SEO from the ground up and organic traffic tripled within eight months. She treats data like a compass, not a crutch.", "name": "Aarav Sharma", "role": "Founder", "company": "Northwind Retail", "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80" },
-    { "id": 2, "quote": "The most accountable marketer we've worked with. Our PPC ROAS went from 1.8x to 5.2x and every rupee is now tracked.", "name": "Elena Whitfield", "role": "Head of Growth", "company": "Lumen SaaS", "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=200&q=80" },
-    { "id": 3, "quote": "Sunita shaped our entire content strategy. Our blog finally ranks and our community actually engages.", "name": "Daniel Okafor", "role": "Marketing Lead", "company": "Botanica Co.", "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" },
-    { "id": 4, "quote": "Working across time zones was seamless. Sharp, data-led campaigns delivered on every deadline without losing the human touch.", "name": "Mira Rai", "role": "Agency Director", "company": "Everest Growth Co.", "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" }
+    {
+      "id": 1,
+      "quote": "Sunita rebuilt our SEO from the ground up and organic traffic tripled within eight months. She treats data like a compass, not a crutch.",
+      "name": "Aarav Sharma",
+      "role": "Founder",
+      "company": "Northwind Retail",
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80"
+    },
+    {
+      "id": 2,
+      "quote": "The most accountable marketer we've worked with. Our PPC ROAS went from 1.8x to 5.2x and every rupee is now tracked.",
+      "name": "Elena Whitfield",
+      "role": "Head of Growth",
+      "company": "Lumen SaaS",
+      "avatar": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=200&q=80"
+    },
+    {
+      "id": 3,
+      "quote": "Sunita shaped our entire content strategy. Our blog finally ranks and our community actually engages.",
+      "name": "Daniel Okafor",
+      "role": "Marketing Lead",
+      "company": "Botanica Co.",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80"
+    },
+    {
+      "id": 4,
+      "quote": "Working across time zones was seamless. Sharp, data-led campaigns delivered on every deadline without losing the human touch.",
+      "name": "Mira Rai",
+      "role": "Agency Director",
+      "company": "Everest Growth Co.",
+      "avatar": "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80"
+    }
   ],
   "contact": {
     "heading": "Let's grow something worth ranking for.",
