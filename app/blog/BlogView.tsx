@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Clock, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import { useContent } from "@/components/ContentProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -52,7 +53,7 @@ export default function BlogView() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="card mb-10 grid overflow-hidden p-0 md:grid-cols-2"
+                className="card relative mb-10 grid overflow-hidden p-0 md:grid-cols-2"
               >
                 <div className="relative aspect-[16/10] md:aspect-auto">
                   {imageSrc(lead.featured_image) && (
@@ -70,7 +71,9 @@ export default function BlogView() {
                     Featured · {lead.category}
                   </span>
                   <h2 className="font-serif text-2xl font-bold leading-snug text-ink sm:text-3xl">
-                    {lead.title}
+                    <Link href={`/blog/${lead.id}`} className="after:absolute after:inset-0">
+                      {lead.title}
+                    </Link>
                   </h2>
                   <p className="mt-3 flex-1 text-muted">{lead.excerpt}</p>
                   <div className="mt-5 flex items-center gap-3 text-xs text-muted">
@@ -93,7 +96,7 @@ export default function BlogView() {
                     whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                     viewport={{ once: true, margin: "-60px" }}
                     transition={{ duration: 0.6, delay: (idx % 3) * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                    className="card group flex flex-col overflow-hidden p-0 transition-all duration-300 hover:-translate-y-1.5 hover:border-line-strong hover:shadow-card-hover"
+                    className="card group relative flex flex-col overflow-hidden p-0 transition-all duration-300 hover:-translate-y-1.5 hover:border-line-strong hover:shadow-card-hover"
                   >
                     <div className="relative aspect-[16/10] w-full overflow-hidden bg-surface-strong">
                       {src && (
@@ -117,7 +120,9 @@ export default function BlogView() {
                         <span>{formatDate(post.published_date)}</span>
                       </div>
                       <h3 className="font-serif text-xl font-semibold leading-snug text-ink transition-colors group-hover:text-primary">
-                        {post.title}
+                        <Link href={`/blog/${post.id}`} className="after:absolute after:inset-0">
+                          {post.title}
+                        </Link>
                       </h3>
                       <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{post.excerpt}</p>
                       <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary">

@@ -67,15 +67,14 @@ export default function BlogPreview({ posts }: { posts: BlogPost[] }) {
                     <span>{formatDate(post.published_date)}</span>
                   </div>
                   <h3 className="font-serif text-xl font-semibold leading-snug text-ink transition-colors group-hover:text-primary">
-                    {post.title}
+                    <Link href={`/blog/${post.id}`} className="after:absolute after:inset-0">
+                      {post.title}
+                    </Link>
                   </h3>
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{post.excerpt}</p>
-                  <Link
-                    href="/blog"
-                    className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary"
-                  >
+                  <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary">
                     Read article <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
-                  </Link>
+                  </span>
                 </div>
               </motion.article>
             );
