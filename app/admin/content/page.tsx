@@ -77,8 +77,6 @@ export default function AdminContentPage() {
       .catch(() => setGithubConfigured(false));
   }, []);
 
-  const apiPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin2024";
-
   useEffect(() => {
     if (!authed || data) return;
     Promise.all([
@@ -108,7 +106,6 @@ export default function AdminContentPage() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            password: apiPassword,
             data: (data as unknown as Record<string, unknown>)[active],
             publishMode: "draft",
           }),

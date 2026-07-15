@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { readDB, writeDB, readDrafts, writeDrafts, clearDraft } from "@/lib/db";
+import { requireAdmin } from "@/lib/adminSession";
 import type { PortfolioData, SectionKey } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
-
-const ADMIN_PASSWORD =
-  process.env.ADMIN_PASSWORD || process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin2024";
 
 const VALID_SECTIONS: SectionKey[] = [
   "personal",
@@ -94,23 +92,14 @@ export async function POST(
       return NextResponse.json({ error: "Invalid section" }, { status: 400 });
     }
 
-    if (process.env.ADMIN_PASSWORD === undefined) {
-      return NextResponse.json(
-        { error: "Server configuration error: ADMIN_PASSWORD is missing in environment variables." },
-        { status: 500 }
-      );
-    }
+    const unauthorized = requireAdmin(req);
+    if (unauthorized) return unauthorized;
 
     const body = await req.json();
-    const { password, data, publishMode } = body as {
-      password?: string;
+    const { data, publishMode } = body as {
       data?: unknown;
       publishMode?: "draft" | "local" | "publish";
     };
-
-    if (password?.trim() !== ADMIN_PASSWORD?.trim()) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
 
     if (data === undefined) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });

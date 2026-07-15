@@ -1,26 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { deleteSubmission, archiveSubmission } from "@/lib/submissions";
+import { requireAdmin } from "@/lib/adminSession";
 
 export const dynamic = "force-dynamic";
-
-const ADMIN_PASSWORD =
-  process.env.ADMIN_PASSWORD || process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin2024";
 
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  if (process.env.ADMIN_PASSWORD === undefined) {
-    return NextResponse.json(
-      { error: "Server configuration error: ADMIN_PASSWORD is missing in environment variables." },
-      { status: 500 }
-    );
-  }
-
-  const password = req.nextUrl.searchParams.get("password");
-  if (password?.trim() !== ADMIN_PASSWORD?.trim()) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const unauthorized = requireAdmin(req);
+  if (unauthorized) return unauthorized;
 
   try {
     const body = await req.json();
@@ -37,17 +26,8 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  if (process.env.ADMIN_PASSWORD === undefined) {
-    return NextResponse.json(
-      { error: "Server configuration error: ADMIN_PASSWORD is missing in environment variables." },
-      { status: 500 }
-    );
-  }
-
-  const password = req.nextUrl.searchParams.get("password");
-  if (password?.trim() !== ADMIN_PASSWORD?.trim()) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const unauthorized = requireAdmin(req);
+  if (unauthorized) return unauthorized;
 
   try {
     const ok = await deleteSubmission(params.id);

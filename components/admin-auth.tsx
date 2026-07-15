@@ -6,10 +6,6 @@ import { Lock, AlertCircle, ShieldCheck, Sparkles } from "lucide-react";
 
 const AUTH_KEY = "portfolio_admin_session";
 
-/** Client-side copy of the admin password (from NEXT_PUBLIC_ADMIN_PASSWORD). */
-export const ADMIN_PASSWORD =
-  process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin2024";
-
 export function useAdminAuth() {
   const [authed, setAuthed] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
@@ -24,25 +20,35 @@ export function useAdminAuth() {
     }
   }, []);
 
-  const login = useCallback((pw: string) => {
-    console.log("Password check:", {
-      hasEnvVar: !!process.env.NEXT_PUBLIC_ADMIN_PASSWORD,
-      inputLength: pw.length,
-    });
-    if (pw.trim() === ADMIN_PASSWORD.trim()) {
-      localStorage.setItem(AUTH_KEY, "1");
-      document.cookie = `${AUTH_KEY}=1; path=/; max-age=${60 * 60 * 24 * 7}; samesite=strict`;
-      setAuthed(true);
-      setError("");
-      return true;
+  const login = useCallback(async (pw: string) => {
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: pw }),
+      });
+      if (res.ok) {
+        localStorage.setItem(AUTH_KEY, "1");
+        setAuthed(true);
+        setError("");
+        return true;
+      }
+      setError("Incorrect password");
+      return false;
+    } catch {
+      setError("Network error, please try again");
+      return false;
     }
-    setError("Incorrect password");
-    return false;
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
     localStorage.removeItem(AUTH_KEY);
     document.cookie = `${AUTH_KEY}=; path=/; max-age=0`;
+    try {
+      await fetch("/api/admin/logout", { method: "POST" });
+    } catch {
+      /* ignore */
+    }
     setAuthed(false);
     setPasswordInput("");
   }, []);

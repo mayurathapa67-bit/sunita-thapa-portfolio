@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/adminSession';
 
 // GET: ONLY fetch from GitHub (no local file reading at all)
 export async function GET() {
@@ -62,7 +63,10 @@ export async function GET() {
 }
 
 // PUT: Save to GitHub only
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest) {
+  const unauthorized = requireAdmin(request);
+  if (unauthorized) return unauthorized;
+
   try {
     const newContent = await request.json();
     const token = process.env.GITHUB_TOKEN;

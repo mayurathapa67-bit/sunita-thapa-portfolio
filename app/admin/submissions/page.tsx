@@ -47,13 +47,11 @@ export default function SubmissionsPage() {
   const [toast, setToast] = useState<string | null>(null);
   const [selected, setSelected] = useState<Submission | null>(null);
 
-  const apiPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin2024";
-
   async function load() {
     if (!authed) return;
     setLoading(true);
     try {
-      const res = await fetch(`/api/submissions?password=${apiPassword}`);
+      const res = await fetch(`/api/submissions`);
       if (res.ok) setSubs(await res.json());
     } finally {
       setLoading(false);
@@ -75,7 +73,7 @@ export default function SubmissionsPage() {
   async function toggleArchive(s: Submission) {
     setArchiving(s.id);
     try {
-      const res = await fetch(`/api/submissions/${s.id}?password=${apiPassword}`, {
+      const res = await fetch(`/api/submissions/${s.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ archived: !s.archived }),
@@ -94,7 +92,7 @@ export default function SubmissionsPage() {
   async function deleteSub(s: Submission) {
     if (!confirm(`Delete submission from ${s.name}? This cannot be undone.`)) return;
     try {
-      const res = await fetch(`/api/submissions/${s.id}?password=${apiPassword}`, {
+      const res = await fetch(`/api/submissions/${s.id}`, {
         method: "DELETE",
       });
       if (res.ok) {

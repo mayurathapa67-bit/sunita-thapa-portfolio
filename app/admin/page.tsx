@@ -22,7 +22,7 @@ export default function AdminLanding() {
         .then((r) => r.json())
         .then((d: PortfolioData) => setCounts((c) => ({ ...c, sections: Object.keys(d).length })))
         .catch(() => {});
-      fetch("/api/submissions?password=" + (process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin2024"))
+      fetch("/api/submissions")
         .then((r) => (r.ok ? r.json() : []))
         .then((s: unknown[]) => setCounts((c) => ({ ...c, submissions: s.length })))
         .catch(() => {});
